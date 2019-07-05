@@ -1,0 +1,5 @@
+name: Backend Utils
+type: module
+description: Backend utilities for Drupal 8
+core: 8.x
+package: Custom

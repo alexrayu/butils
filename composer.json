@@ -1,0 +1,14 @@
+{
+  "name": "drupal/butils",
+  "type": "drupal-module",
+  "description": "Backend utilities for Drupal 8",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/butils",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/butils",
+    "source": "http://cgit.drupalcode.org/butils"
+  },
+  "require": { }
+}

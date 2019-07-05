@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Contains butils.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function butils_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+
+    // Main module help for the butils module.
+    case 'help.page.butils':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Backend utilities for Drupal 8') . '</p>';
+      return $output;
+
+    default:
+  }
+}
