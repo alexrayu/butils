@@ -41,31 +41,46 @@ trait XmlTrait {
    *   Reference path.
    * @param array $data
    *   Imported data.
+   * @param array $options
+   *   Set of options:
+   *   - trim: trim output. Defaults to TRUE.
+   *   - force_array: force output to always be an array. Defaults to TRUE.
    *
-   * @return array
+   * @return array|string
    *   Response values.
    */
-  public function mapXmlValues($path, array $data) {
+  public function mapXmlValues($path, array $data, array $options = []) {
+    $trim = isset($options['trim']) ? $options['trim'] : TRUE;
+    $force_array = isset($options['force_array']) ? $options['force_array'] : TRUE;
+
     $path_parts = explode('.', $path);
     $dest_key = array_pop($path_parts);
     $path = implode('.', $path_parts);
-    $value = $this->arrayMap($path, $data);
+    $value = !empty($path) ? $this->arrayMap($path, $data) : $this->arrayMap($dest_key, $data);
     $results = [];
+
+    // Direct value.
+    if (empty($path) && !empty($dest_key)) {
+      $value = is_string($value) && $trim ? trim($value) : $value;
+      return $force_array ? [$value] : $value;
+    }
 
     // If empty return.
     if (empty($value)) {
-      return [];
+      return $force_array ? [] : '';
     }
 
     // If directly set as single, return.
     if (isset($value[$dest_key])) {
-      return [$value[$dest_key]];
+      $value[$dest_key] = is_string($value[$dest_key]) && $trim ? trim($value[$dest_key]) : $value[$dest_key];
+      return $force_array ? [$value[$dest_key]] : $value[$dest_key];
     }
 
     // If an array, iterate.
     if (is_array($value)) {
       foreach ($value as $entry) {
         if (isset($entry[$dest_key])) {
+          $value[$dest_key] = is_string($entry[$dest_key]) && $trim ? trim($entry[$dest_key]) : $entry[$dest_key];
           $results[] = $entry[$dest_key];
         }
       }
