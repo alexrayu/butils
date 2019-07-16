@@ -73,7 +73,13 @@ trait XmlTrait {
     // If directly set as single, return.
     if (isset($value[$dest_key])) {
       $value[$dest_key] = is_string($value[$dest_key]) && $trim ? trim($value[$dest_key]) : $value[$dest_key];
-      return $force_array ? [$value[$dest_key]] : $value[$dest_key];
+      $is_collection = $this->isCollection($value[$dest_key]);
+      if ($force_array && (!is_array($value[$dest_key]) || !$is_collection)) {
+        return [$value[$dest_key]];
+      }
+      else {
+        return $value[$dest_key];
+      }
     }
 
     // If an array, iterate.
@@ -87,6 +93,27 @@ trait XmlTrait {
     }
 
     return $results;
+  }
+
+  /**
+   * Check if array is a collection rather than the end value.
+   *
+   * A collection has numeric keys only.
+   *
+   * @param array $data
+   *   Checked data.
+   *
+   * @return bool
+   *   Result.
+   */
+  protected function isCollection(array $data) {
+    foreach ($data as $key => $value) {
+      if (!is_numeric($key)) {
+        return FALSE;
+      }
+    }
+
+    return TRUE;
   }
 
   /**
