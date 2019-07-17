@@ -34,7 +34,7 @@ trait EntityTrait {
       $entity = $this->entityTypeManager->getStorage($type)->load($id);
     }
     else {
-      $entity = $this->entityTypeManager->getStorage($type)->create($values);
+      $entity = $this->entityTypeManager->getStorage($type)->create($values)->save();
     }
 
     return $entity;
