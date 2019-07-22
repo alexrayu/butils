@@ -48,4 +48,18 @@ trait HtmlTrait {
     return MailFormatHelper::htmlToText($html);
   }
 
+  /**
+   * {@inheritdoc}
+   *
+   * A wrapper around the TruncateHtml class.
+   */
+  public function trucateHtml($html, $limit, $ellipsis = '...', $type = 'chars') {
+    $truncater = new TruncateHTML();
+    if ($type == 'words') {
+      return $truncater->truncateWords($html, $limit, $ellipsis);
+    }
+
+    return $truncater->truncateChars($html, $limit, $ellipsis);
+  }
+
 }

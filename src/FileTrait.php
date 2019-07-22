@@ -18,26 +18,35 @@ trait FileTrait {
    *   A set of root folders.
    * @param array $extensions
    *   Supported extensions without the starting dots.
-   * @param int $start
-   *   Start count (skip $start items).
+   * @param string $start
+   *   File name to start with.
    *
    * @return array
    *   Found files, full paths.
    */
-  public function findFilesRecurive(array $paths, array $extensions, $start = 0) {
+  public function findFilesRecurive(array $paths, array $extensions, $start = '') {
     $files = [];
 
     // Search files iteratively.
-    $i = 0;
     foreach ($paths as $path) {
+      if (!file_exists($path)) {
+        continue;
+      }
       $dir_iterator = new \RecursiveDirectoryIterator($path);
       $iterator = new \RecursiveIteratorIterator($dir_iterator);
       foreach ($extensions as $extension) {
         $regex = new \RegexIterator($iterator, '/^.+\.' . $extension . '$/i', \RecursiveRegexIterator::GET_MATCH);
+        $start_reached = empty($start) ? TRUE : FALSE;
         foreach ($regex as $item) {
-          $i++;
-          if ($i >= $start) {
-            $files[] = reset($item);
+          $item = reset($item);
+          $pathinfo = pathinfo($item);
+          if (!$start_reached) {
+            if (strtolower($pathinfo['basename']) == $start || strtolower($pathinfo['filename']) == $start) {
+              $start_reached = TRUE;
+            }
+          }
+          if ($start_reached) {
+            $files[] = $item;
           }
         }
       }
