@@ -206,9 +206,16 @@ trait EntityTrait {
     if (!$entity->hasField($field_name)) {
       return;
     }
-    $values = $entity->get($field_name)->getValue();
-    foreach ($values as $key => $value) {
-      $entity->get($field_name)->removeItem($key);
+    $items = $entity->get($field_name);
+    $has_items = !!$items->count();
+    for ($i = 0; $i < $items->count(); $i++) {
+      $items->removeItem($i);
+
+      // Adjust for a rekey().
+      $i--;
+    }
+    if ($has_items) {
+      $entity->save();
     }
   }
 
