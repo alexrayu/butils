@@ -2,6 +2,7 @@
 
 namespace Drupal\butils;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Mail\MailFormatHelper;
 
 /**
@@ -30,6 +31,8 @@ trait HtmlTrait {
     $html = preg_replace("{(<br[\\s]*(>|\/>)\s*){2,}}i", "<br /><br />", $html);
     $html = preg_replace("{(<br[\\s]*(>|\/>)\s*)}i", "<br />", $html);
     $html = preg_replace('/[[:blank:]]+/', ' ', $html);
+    $html = str_replace(' < ', ' &lt; ', $html);
+    $html = str_replace(' > ', ' &gt; ', $html);
     $html = trim($html);
 
     return $html;
