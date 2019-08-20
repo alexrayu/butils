@@ -115,8 +115,10 @@ trait TaxonomyTrait {
     // Child does not exist, check and create hierarchy.
     $tids = [];
     foreach ($parts as $part) {
-      $res = $this->toTerm($part, $vid, $langcode);
-      $tids[] = $res;
+      if (!empty($part)) {
+        $res = $this->toTerm($part, $vid, $langcode);
+        $tids[] = $res;
+      }
     }
     $terms = Term::loadMultiple($tids);
     $terms = array_reverse($terms);
