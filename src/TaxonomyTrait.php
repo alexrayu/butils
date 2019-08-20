@@ -103,13 +103,15 @@ trait TaxonomyTrait {
 
     // If final child exists, return it.
     $word = [end($parts)];
-    $res = \Drupal::entityQuery('taxonomy_term')
-      ->condition('vid', $vid)
-      ->condition('name', $word)
-      ->condition('langcode', $langcode)
-      ->execute();
-    if (!empty($res)) {
-      return reset($res);
+    if (!empty($word) && !empty($vid) && !empty($langcode)) {
+      $res = \Drupal::entityQuery('taxonomy_term')
+        ->condition('vid', $vid)
+        ->condition('name', $word)
+        ->condition('langcode', $langcode)
+        ->execute();
+      if (!empty($res)) {
+        return reset($res);
+      }
     }
 
     // Child does not exist, check and create hierarchy.
