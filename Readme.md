@@ -1,4 +1,4 @@
-# Back end Utils
+#Back end Utils
 
 This module provides a set of frequently used back end utilities as services.
 
@@ -72,6 +72,8 @@ preserving the document's look where possible (not just strip_tags()).
 String related functions.
 
 - **cleanString()** - Remove non-UTF characters form string.
+
+- **regexRecursive()** - Run a set of regex on a string recursively.
 
 ### Taxonomy
 Taxonomy related helper functions.
