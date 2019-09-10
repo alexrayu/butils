@@ -219,4 +219,37 @@ trait EntityTrait {
     }
   }
 
+  /**
+   * Add fields to an entity schema.
+   *
+   * @param string $entity_name
+   *   Name of the entity.
+   * @param array $field_spec
+   *   Entity new field specs.
+   */
+  function addFields($entity_name, array $field_spec) {
+    $fields = \Drupal::service('entity_field.manager')->getFieldMapByFieldType($entity_name);
+    $table_names = [];
+    foreach ($fields as $entity_fields) {
+      foreach ($entity_fields as $field_name => $field_name_details) {
+        $table_names[] = [
+          'table_name' => $entity_name . '__' . $field_name,
+          'field_name' => $field_name,
+        ];
+        $table_names[] = [
+          'table_name' => $entity_name . '_revision__' . $field_name,
+          'field_name' => $field_name,
+        ];
+      }
+    }
+    if (!empty($table_names)) {
+      $schema = Database::getConnection()->schema();
+      foreach ($table_names as $table_data) {
+        foreach ($field_spec as $field_name => $definition) {
+          $schema->addField($table_data['table_name'], $table_data['field_name'] . '_' . $field_name, $definition);
+        }
+      }
+    }
+  }
+
 }
