@@ -48,6 +48,9 @@ trait TaxonomyTrait {
    *   Term id.
    */
   public function toTerm($name, $vid, $langcode = 'zxx') {
+    if (empty($name)) {
+      return FALSE;
+    }
 
     // Force zxx if vocabulary is not translatable.
     $vocab_langcode = Vocabulary::load($vid)->language()->getId();
@@ -56,7 +59,7 @@ trait TaxonomyTrait {
     }
 
     // Get existing.
-    $name = trim($name);
+    $name = trim(strip_tags($name));
     $res = \Drupal::entityQuery('taxonomy_term')
       ->condition('vid', $vid)
       ->condition('name', $name)
@@ -132,8 +135,11 @@ trait TaxonomyTrait {
         ])->save();
       }
     }
+    if (!empty($terms[0])) {
+      return $terms[0]->id();
+    }
 
-    return $terms[0]->id();
+    return 0;
   }
 
   /**

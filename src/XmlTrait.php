@@ -126,6 +126,7 @@ trait XmlTrait {
    *   Fixed XML.
    */
   public function cleanXml($xml) {
+    $xml = $this->cleanString($xml);
     $search = [
       '&#132;',
       '&#212;',

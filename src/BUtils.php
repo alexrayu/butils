@@ -22,6 +22,7 @@ class BUtils {
   use StringTrait;
   use TaxonomyTrait;
   use XmlTrait;
+  use ParagraphsTrait;
 
   /**
    * Entity type manager.
