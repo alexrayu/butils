@@ -96,3 +96,10 @@ Functions to facilitate working with Xml.
 the specific XML single/multiple value handling difference.
 
 - **cleanXml()** - Removes Win-specific charcters from Xml.
+
+### State
+Facilitates read/write from state.
+
+- **getState()** - Reads a key from the state api.
+
+- **setState()** - Writes a key and value into the state api.

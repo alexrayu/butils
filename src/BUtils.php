@@ -5,6 +5,7 @@ namespace Drupal\butils;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
+use Drupal\Core\State\StateInterface;
 
 /**
  * Class BUtils.
@@ -23,6 +24,7 @@ class BUtils {
   use TaxonomyTrait;
   use XmlTrait;
   use ParagraphsTrait;
+  use StateTrait;
 
   /**
    * Entity type manager.
@@ -46,6 +48,13 @@ class BUtils {
   protected $entityDisplayRepository;
 
   /**
+   * State service.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
    * Constructs a new BUtils object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -54,11 +63,42 @@ class BUtils {
    *   Entity field manager.
    * @param \Drupal\Core\Entity\EntityDisplayRepository $entity_display_repository
    *   Entity display repository.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   State manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager, EntityDisplayRepository $entity_display_repository) {
+  public function __construct(
+    EntityTypeManagerInterface $entity_type_manager,
+    EntityFieldManagerInterface $entity_field_manager,
+    EntityDisplayRepository $entity_display_repository,
+    StateInterface $state) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
     $this->entityDisplayRepository = $entity_display_repository;
+    $this->state = $state;
+  }
+
+  /**
+   * Truncate HTML.
+   *
+   * @param string $html
+   *   HTML to truncate.
+   * @param string $type
+   *   Whether the $limit variable will be words or characters.
+   * @param int $limit
+   *   Truncation limit.
+   * @param string $ellipsis
+   *   Truncation ellipsis.
+   *
+   * @return mixed
+   */
+  public function truncateHTML($html, $type = 'chars', $limit = 300, $ellipsis = '...') {
+    $truncate = new TruncateHTML();
+    if ($type == 'words') {
+      return $truncate->truncateWords($html, $limit, $ellipsis);
+    }
+    else {
+      return $truncate->truncateWords($html, $limit, $ellipsis);
+    }
   }
 
 }

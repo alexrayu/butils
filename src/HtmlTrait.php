@@ -76,4 +76,17 @@ trait HtmlTrait {
     return $truncater->truncateChars($html, $limit, $ellipsis);
   }
 
+  /**
+   * Strip links and replace them with their text.
+   *
+   * @param string $html
+   *   Text to process.
+   *
+   * @return string
+   *   String with stripped links.
+   */
+  public function stripLinks($html) {
+    return preg_replace('/<a.*?>(.*)<\/a>/i', '$1', $html);
+  }
+
 }
