@@ -74,9 +74,10 @@ trait HtmlTrait {
    * @param string $ellipsis
    *   Truncation ellipsis.
    *
-   * @return mixed
+   * @return string
+   *   Truncated html.
    */
-  public function truncateHTML($html, $type = 'chars', $limit = 300, $ellipsis = '...') {
+  public function truncateHtml($html, $type = 'chars', $limit = 300, $ellipsis = '...') {
     $truncate = new TruncateHTML();
     if ($type == 'words') {
       return $truncate->truncateWords($html, $limit, $ellipsis);
