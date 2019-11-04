@@ -2,7 +2,7 @@ services:
   butils:
     class: Drupal\butils\BUtils
     arguments:
-      - '@entity_type.manager',
-      - '@entity_field.manager',
-      - '@entity_display.repository',
-      - '@state',
+      - '@entity_type.manager'
+      - '@entity_field.manager'
+      - '@entity_display.repository'
+      - '@state'
