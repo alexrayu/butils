@@ -77,28 +77,4 @@ class BUtils {
     $this->state = $state;
   }
 
-  /**
-   * Truncate HTML.
-   *
-   * @param string $html
-   *   HTML to truncate.
-   * @param string $type
-   *   Whether the $limit variable will be words or characters.
-   * @param int $limit
-   *   Truncation limit.
-   * @param string $ellipsis
-   *   Truncation ellipsis.
-   *
-   * @return mixed
-   */
-  public function truncateHTML($html, $type = 'chars', $limit = 300, $ellipsis = '...') {
-    $truncate = new TruncateHTML();
-    if ($type == 'words') {
-      return $truncate->truncateWords($html, $limit, $ellipsis);
-    }
-    else {
-      return $truncate->truncateWords($html, $limit, $ellipsis);
-    }
-  }
-
 }

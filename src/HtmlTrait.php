@@ -63,17 +63,27 @@ trait HtmlTrait {
   }
 
   /**
-   * {@inheritdoc}
+   * Truncate HTML.
    *
-   * A wrapper around the TruncateHtml class.
+   * @param string $html
+   *   HTML to truncate.
+   * @param string $type
+   *   Whether the $limit variable will be words or characters.
+   * @param int $limit
+   *   Truncation limit.
+   * @param string $ellipsis
+   *   Truncation ellipsis.
+   *
+   * @return mixed
    */
-  public function trucateHtml($html, $limit, $ellipsis = '...', $type = 'chars') {
-    $truncater = new TruncateHTML();
+  public function truncateHTML($html, $type = 'chars', $limit = 300, $ellipsis = '...') {
+    $truncate = new TruncateHTML();
     if ($type == 'words') {
-      return $truncater->truncateWords($html, $limit, $ellipsis);
+      return $truncate->truncateWords($html, $limit, $ellipsis);
     }
-
-    return $truncater->truncateChars($html, $limit, $ellipsis);
+    else {
+      return $truncate->truncateWords($html, $limit, $ellipsis);
+    }
   }
 
   /**
