@@ -83,7 +83,7 @@ trait HtmlTrait {
       return $truncate->truncateWords($html, $limit, $ellipsis);
     }
     else {
-      return $truncate->truncateWords($html, $limit, $ellipsis);
+      return $truncate->truncateChars($html, $limit, $ellipsis);
     }
   }
 
