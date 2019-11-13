@@ -16,6 +16,7 @@ class BUtils {
 
   use ArrayTrait;
   use DatetimeTrait;
+  use DomDocumentTrait;
   use EntityTrait;
   use FieldTrait;
   use FileTrait;
