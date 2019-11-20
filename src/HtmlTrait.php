@@ -71,8 +71,8 @@ trait HtmlTrait {
    *   Whether the $limit variable will be words or characters.
    * @param int $limit
    *   Truncation limit.
-   * @param string $ellipsis
-   *   Truncation ellipsis.
+   * @param bool $ellipsis
+   *   Whether to use ellipsis.
    * @param bool $count_html
    *   Whether html tags are counted.
    *
@@ -81,9 +81,9 @@ trait HtmlTrait {
    */
   public function truncateHtml($html,
     $type = 'chars',
-    $limit = 300,
-    $ellipsis = ' …',
-    $count_html = FALSE) {
+    $limit = 254,
+    $ellipsis = TRUE,
+    $count_html = TRUE) {
     if (empty($html)) {
       return '';
     }
@@ -96,6 +96,9 @@ trait HtmlTrait {
       ], $html);
     }
     else {
+      if (!empty($ellipsis)) {
+        $ellipsis = '…';
+      }
       $truncate = new TruncateHTML();
       if ($type == 'words') {
         return $truncate->truncateWords($html, $limit, $ellipsis);
