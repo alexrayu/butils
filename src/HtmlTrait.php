@@ -82,12 +82,15 @@ trait HtmlTrait {
   public function truncateHtml($html,
     $type = 'chars',
     $limit = 300,
-    $ellipsis = '…',
+    $ellipsis = ' …',
     $count_html = FALSE) {
+    if (empty($html)) {
+      return '';
+    }
     if ($count_html) {
       return FieldPluginBase::trimText([
         'max_length' => $limit,
-        'word_boundry' => TRUE,
+        'word_boundary' => TRUE,
         'ellipsis' => $ellipsis,
         'html' => TRUE,
       ], $html);
