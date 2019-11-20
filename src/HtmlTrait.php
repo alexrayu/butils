@@ -2,8 +2,8 @@
 
 namespace Drupal\butils;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Mail\MailFormatHelper;
+use Drupal\views\Plugin\views\field\FieldPluginBase;
 
 /**
  * Trait Html.
@@ -73,17 +73,33 @@ trait HtmlTrait {
    *   Truncation limit.
    * @param string $ellipsis
    *   Truncation ellipsis.
+   * @param bool $count_html
+   *   Whether html tags are counted.
    *
    * @return string
    *   Truncated html.
    */
-  public function truncateHtml($html, $type = 'chars', $limit = 300, $ellipsis = '...') {
-    $truncate = new TruncateHTML();
-    if ($type == 'words') {
-      return $truncate->truncateWords($html, $limit, $ellipsis);
+  public function truncateHtml($html,
+    $type = 'chars',
+    $limit = 300,
+    $ellipsis = '...',
+    $count_html = FALSE) {
+    if ($count_html) {
+      return FieldPluginBase::trimText([
+        'max_length' => $limit,
+        'word_boundry' => TRUE,
+        'ellipsis' => $ellipsis,
+        'html' => TRUE,
+      ], $html);
     }
     else {
-      return $truncate->truncateChars($html, $limit, $ellipsis);
+      $truncate = new TruncateHTML();
+      if ($type == 'words') {
+        return $truncate->truncateWords($html, $limit, $ellipsis);
+      }
+      else {
+        return $truncate->truncateWords($html, $limit, $ellipsis);
+      }
     }
   }
 
