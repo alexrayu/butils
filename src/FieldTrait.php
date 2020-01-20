@@ -145,9 +145,19 @@ trait FieldTrait {
     }
     $field_item = $entity->{$field_name};
     if (!empty($field_item)) {
+      $definition = $field_item->getFieldDefinition();
+      $field_type = $definition->get('field_type');
       $field_build = $field_item->view($view_mode);
       $field_build['#label_display'] = 'hidden';
-      $result = strip_tags((string) $this->renderer->renderRoot($field_build));
+      switch ($field_type) {
+        case 'file':
+        case 'image':
+          $result = (string) $this->renderer->renderRoot($field_build);
+          break;
+
+        default:
+          $result = strip_tags((string) $this->renderer->renderRoot($field_build));
+      }
       $result = $this->cleanHtml($result);
     }
     return $result;
