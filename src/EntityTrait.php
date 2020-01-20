@@ -205,7 +205,7 @@ trait EntityTrait {
    * @return int
    *   Number of words.
    */
-  public function entityCountWords(EntityInterface $entity, $view_mode = 'full') {
+  public function entityCountWords(EntityInterface $entity, $view_mode = 'default') {
     $build = $this->entityTypeManager
       ->getViewBuilder($entity->getEntityTypeId())
       ->view($entity, $view_mode);

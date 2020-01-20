@@ -125,7 +125,7 @@ trait FieldTrait {
   }
 
   /**
-   * Wiews field value without the unnecessary wrappers and label.
+   * Renders field value without the wrappers and label.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   Entity posessing the field.
@@ -137,7 +137,7 @@ trait FieldTrait {
    * @return string
    *   Field value.
    */
-  public function viewField(EntityInterface &$entity, $field_name, $view_mode = 'default') {
+  public function renderField(EntityInterface &$entity, $field_name, $view_mode = 'default') {
     $result = '';
     if (!$entity instanceof FieldableEntityInterface
         || !$entity->hasField($field_name)) {
