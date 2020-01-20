@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\Render\RendererInterface;
 
 /**
  * Class BUtils.
@@ -16,7 +17,6 @@ class BUtils {
 
   use ArrayTrait;
   use DatetimeTrait;
-  use DomDocumentTrait;
   use EntityTrait;
   use FieldTrait;
   use FileTrait;
@@ -56,6 +56,13 @@ class BUtils {
   protected $state;
 
   /**
+   * The renderer.
+   *
+   * @var \Drupal\Core\Render\RendererInterface
+   */
+  protected $renderer;
+
+  /**
    * Constructs a new BUtils object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -66,16 +73,20 @@ class BUtils {
    *   Entity display repository.
    * @param \Drupal\Core\State\StateInterface $state
    *   State manager.
+   * @param \Drupal\Core\Render\RendererInterface $renderer
+   *   Renderer.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     EntityFieldManagerInterface $entity_field_manager,
     EntityDisplayRepository $entity_display_repository,
-    StateInterface $state) {
+    StateInterface $state,
+    RendererInterface $renderer) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
     $this->entityDisplayRepository = $entity_display_repository;
     $this->state = $state;
+    $this->renderer = $renderer;
   }
 
 }

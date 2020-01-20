@@ -3,7 +3,6 @@
 namespace Drupal\butils;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\file\Entity\File;
 
 /**
@@ -193,33 +192,6 @@ trait EntityTrait {
     }
 
     return $view_modes;
-  }
-
-  /**
-   * Empty an entity's field.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   Entity posessing the field.
-   * @param string $field_name
-   *   Field name.
-   * @param bool $save
-   *   Whether or not the entity should be saved at the end.
-   */
-  public function emptyField(EntityInterface &$entity, $field_name, $save = TRUE) {
-    if (!$entity instanceof FieldableEntityInterface || !$entity->hasField($field_name)) {
-      return;
-    }
-    $items = $entity->get($field_name);
-    $has_items = !!$items->count();
-    for ($i = 0; $i < $items->count(); $i++) {
-      $items->removeItem($i);
-
-      // Adjust for a rekey().
-      $i--;
-    }
-    if ($has_items && $save) {
-      $entity->save();
-    }
   }
 
 }

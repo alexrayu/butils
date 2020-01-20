@@ -2,6 +2,9 @@
 
 namespace Drupal\butils;
 
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
+
 /**
  * Field trait.
  *
@@ -92,6 +95,62 @@ trait FieldTrait {
     }
 
     return $details;
+  }
+
+  /**
+   * Empty an entity's field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity posessing the field.
+   * @param string $field_name
+   *   Field name.
+   * @param bool $save
+   *   Whether or not the entity should be saved at the end.
+   */
+  public function emptyField(EntityInterface &$entity, $field_name, $save = TRUE) {
+    if (!$entity instanceof FieldableEntityInterface || !$entity->hasField($field_name)) {
+      return;
+    }
+    $items = $entity->get($field_name);
+    $has_items = !!$items->count();
+    for ($i = 0; $i < $items->count(); $i++) {
+      $items->removeItem($i);
+
+      // Adjust for a rekey().
+      $i--;
+    }
+    if ($has_items && $save) {
+      $entity->save();
+    }
+  }
+
+  /**
+   * Wiews field value without the unnecessary wrappers and label.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity posessing the field.
+   * @param string $field_name
+   *   Field name.
+   * @param string $view_mode
+   *   The view mode to render the field.
+   *
+   * @return string
+   *   Field value.
+   */
+  public function viewField(EntityInterface &$entity, $field_name, $view_mode = 'default') {
+    $result = '';
+    if (!$entity instanceof FieldableEntityInterface
+        || !$entity->hasField($field_name)) {
+      return $result;
+    }
+    $field_item = $entity->{$field_name};
+    if (!empty($field_item)) {
+      $field_build = $field_item->view($view_mode);
+      $field_build['#label_display'] = 'hidden';
+      $result = strip_tags((string) $this->renderer->renderRoot($field_build));
+      $result = $this->cleanHtml($result);
+    }
+    return $result;
   }
 
 }

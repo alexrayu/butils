@@ -2,8 +2,8 @@
 
 namespace Drupal\butils;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Mail\MailFormatHelper;
-use Drupal\views\Plugin\views\field\FieldPluginBase;
 
 /**
  * Trait Html.
@@ -71,41 +71,19 @@ trait HtmlTrait {
    *   Whether the $limit variable will be words or characters.
    * @param int $limit
    *   Truncation limit.
-   * @param bool $ellipsis
-   *   Whether to use ellipsis.
-   * @param bool $count_html
-   *   Whether html tags are counted.
+   * @param string $ellipsis
+   *   Truncation ellipsis.
    *
    * @return string
    *   Truncated html.
    */
-  public function truncateHtml($html,
-    $type = 'chars',
-    $limit = 254,
-    $ellipsis = TRUE,
-    $count_html = TRUE) {
-    if (empty($html)) {
-      return '';
-    }
-    if ($count_html) {
-      return FieldPluginBase::trimText([
-        'max_length' => $limit,
-        'word_boundary' => TRUE,
-        'ellipsis' => $ellipsis,
-        'html' => TRUE,
-      ], $html);
+  public function truncateHtml($html, $type = 'chars', $limit = 300, $ellipsis = '...') {
+    $truncate = new TruncateHTML();
+    if ($type == 'words') {
+      return $truncate->truncateWords($html, $limit, $ellipsis);
     }
     else {
-      if (!empty($ellipsis)) {
-        $ellipsis = '…';
-      }
-      $truncate = new TruncateHTML();
-      if ($type == 'words') {
-        return $truncate->truncateWords($html, $limit, $ellipsis);
-      }
-      else {
-        return $truncate->truncateChars($html, $limit, $ellipsis);
-      }
+      return $truncate->truncateWords($html, $limit, $ellipsis);
     }
   }
 

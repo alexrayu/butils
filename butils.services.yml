@@ -6,3 +6,4 @@ services:
       - '@entity_field.manager'
       - '@entity_display.repository'
       - '@state'
+      - '@renderer'
