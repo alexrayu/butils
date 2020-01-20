@@ -194,4 +194,23 @@ trait EntityTrait {
     return $view_modes;
   }
 
+  /**
+   * Counts words in an entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity to render and count words.
+   * @param string $view_mode
+   *   View mode to render in.
+   *
+   * @return int
+   *   Number of words.
+   */
+  public function entityCountWords(EntityInterface $entity, $view_mode = 'full') {
+    $build = $this->entityTypeManager
+      ->getViewBuilder($entity->getEntityTypeId())
+      ->view($entity, $view_mode);
+    $html = $this->renderer->renderRoot($build);
+    return $this->countWords($html);
+  }
+
 }

@@ -122,4 +122,19 @@ trait HtmlTrait {
     return preg_replace('/<a.*?>(.*)<\/a>/i', '$1', $html);
   }
 
+  /**
+   * Counts words in HTML.
+   *
+   * @param string $html
+   *   HTML to count words in. Can be a plain text string.
+   *
+   * @return int
+   *   Number of words.
+   */
+  public function countWords($html) {
+    $html = strip_tags($html);
+    $html = strtolower($this->cleanHtml($html));
+    return str_word_count($html);
+  }
+
 }
