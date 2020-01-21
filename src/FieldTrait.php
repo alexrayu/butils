@@ -131,23 +131,29 @@ trait FieldTrait {
    *   Entity posessing the field.
    * @param string $field_name
    *   Field name.
-   * @param string $view_mode
-   *   The view mode to render the field.
+   * @param array $options
+   *   Render options.
+   *     - display: Render display mode. Default "default".
+   *     - multiple: Whether to render multivalue items. Default TRUE.
    *
    * @return string
    *   Field value.
    */
-  public function renderField(EntityInterface &$entity, $field_name, $view_mode = 'default') {
+  public function renderField(EntityInterface &$entity, $field_name, array $options = []) {
     $result = '';
+    $options['display'] = $options['display'] ?? 'default';
+    $options['multiple'] = $options['multiple'] ?? TRUE;
     if (!$entity instanceof FieldableEntityInterface
         || !$entity->hasField($field_name)) {
       return $result;
     }
-    $field_item = $entity->{$field_name};
+    $field_item = $options['multiple']
+      ? $entity->{$field_name}
+      : $entity->{$field_name}->get(0);
     if (!empty($field_item)) {
       $definition = $field_item->getFieldDefinition();
       $field_type = $definition->get('field_type');
-      $field_build = $field_item->view($view_mode);
+      $field_build = $field_item->view($options['display']);
       $field_build['#label_display'] = 'hidden';
       switch ($field_type) {
         case 'file':
