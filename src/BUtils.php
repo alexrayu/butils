@@ -26,6 +26,7 @@ class BUtils {
   use XmlTrait;
   use ParagraphsTrait;
   use StateTrait;
+  use DomDocumentTrait;
 
   /**
    * Entity type manager.
