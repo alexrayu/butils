@@ -7,6 +7,7 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Database\Driver\mysql\Connection;
 
 /**
  * Class BUtils.
@@ -64,6 +65,13 @@ class BUtils {
   protected $renderer;
 
   /**
+   * Database connection.
+   *
+   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   */
+  protected $database;
+
+  /**
    * Constructs a new BUtils object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -76,18 +84,22 @@ class BUtils {
    *   State manager.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer.
+   * @param \Drupal\Core\Database\Driver\mysql\Connection $database
+   *   Database connection.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
     EntityFieldManagerInterface $entity_field_manager,
     EntityDisplayRepository $entity_display_repository,
     StateInterface $state,
-    RendererInterface $renderer) {
+    RendererInterface $renderer,
+    Connection $database) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
     $this->entityDisplayRepository = $entity_display_repository;
     $this->state = $state;
     $this->renderer = $renderer;
+    $this->database = $database;
   }
 
 }

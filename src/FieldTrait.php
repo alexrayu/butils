@@ -169,4 +169,33 @@ trait FieldTrait {
     return $result;
   }
 
+  /**
+   * A hack to get field value without a Node::load().
+   *
+   * To be used for speed critical cases, use Node::load() otherwise.
+   *
+   * @param int $entity_id
+   *   Entity id.
+   * @param string $field_name
+   *   Name of the field.
+   * @param string $entity_type
+   *   Entity type machine string, like "node".
+   * @param int $delta
+   *   Field value Delta.
+   *
+   * @return mixed
+   *   Query result.
+   */
+  public function getFieldValueByIds($entity_id, $field_name, $entity_type = 'node', $delta = 0) {
+    $table = $entity_type . '__' . $field_name;
+    $row = $field_name . '_value';
+    return $this->database->select($table, 't')
+      ->condition('entity_id', $entity_id)
+      ->condition('deleted', 0)
+      ->condition('delta', $delta)
+      ->fields('t', [$row])
+      ->execute()
+      ->fetchField();
+  }
+
 }

@@ -7,3 +7,4 @@ services:
       - '@entity_display.repository'
       - '@state'
       - '@renderer'
+      - '@database'
