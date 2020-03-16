@@ -8,3 +8,10 @@ services:
       - '@state'
       - '@renderer'
       - '@database'
+      - '@language_manager'
+      - '@butils.language_negotiator'
+  butils.language_negotiator:
+    class: Drupal\butils\Language\ButilsLanguageNegotiator
+    arguments: ['@language_manager', '@plugin.manager.language_negotiation_method', '@config.factory', '@settings', '@request_stack']
+    calls:
+      - [initLanguageManager]

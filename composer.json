@@ -1,7 +1,7 @@
 {
   "name": "drupal/butils",
   "type": "drupal-module",
-  "description": "Backend utilities for Drupal 8",
+  "description": "Backend utilities for Drupal",
   "keywords": ["Drupal"],
   "license": "GPL-2.0+",
   "homepage": "https://www.drupal.org/project/butils",
