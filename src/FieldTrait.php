@@ -27,13 +27,13 @@ trait FieldTrait {
     $list = $this->entityFieldManager->getFieldDefinitions($entity_type, $bundle);
     $extended_definitions = [];
     foreach ($list as $name => $definition) {
-      $definitions[$name] = [
+      $extended_definitions[$name] = [
         'field_name' => $name,
         'entity_type' => $entity_type,
         'bundle' => $bundle,
         'definition' => $definition,
       ];
-      $definitions[$name]['details'] = $this->getFieldDefinitionsDetails($definitions[$name]);
+      $extended_definitions[$name]['details'] = $this->getFieldDefinitionsDetails($extended_definitions[$name]);
     }
 
     return $extended_definitions;
@@ -43,7 +43,7 @@ trait FieldTrait {
    * Gets the details of a filter.
    *
    * @param array $extended_definition
-   *   Field's extended definition array.
+   *   Field's extended definition object.
    *
    * @return array
    *   Filter details usable for filtering.
