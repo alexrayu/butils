@@ -24,7 +24,7 @@ trait DomDocumentTrait {
     $html = trim($doc->saveHTML());
     $node_name = $n->nodeName;
     if (!empty($node_name) && $node_name != '#text') {
-      $res = preg_replace('#^<' . $node_name .'[^>]*>|</'. $node_name .'>$#', '', $html);
+      $res = preg_replace('#^<' . $node_name . '[^>]*>|</' . $node_name . '>$#', '', $html);
     }
     else {
       $res = $html;
