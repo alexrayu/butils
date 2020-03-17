@@ -23,7 +23,7 @@ trait StringTrait {
   public function cleanString($string) {
     $string = str_replace('&#10;', '', $string);
     $string = str_replace('&#8201;', ' ', $string);
-    $string = preg_replace(array('@([\xef][\xbf][\xbf])@', '@[\x00-\x08\x0B\x0C\x0E-\x1F]@'), ' ', $string);
+    $string = preg_replace(['@([\xef][\xbf][\xbf])@', '@[\x00-\x08\x0B\x0C\x0E-\x1F]@'], ' ', $string);
     $string = preg_replace('/(?:(?:\r\n|\r|\n)\s*){2}/s', "\n\n", $string);
     $string = trim($string);
 
