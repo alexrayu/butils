@@ -174,8 +174,8 @@ trait FieldTrait {
    *
    * To be used for speed critical cases, use Node::load() otherwise.
    *
-   * @param int $entity_id
-   *   Entity id.
+   * @param int|array $entity_id
+   *   Entity id/ids.
    * @param string $field_name
    *   Name of the field.
    * @param string $entity_type
@@ -189,13 +189,41 @@ trait FieldTrait {
   public function getFieldValueByIds($entity_id, $field_name, $entity_type = 'node', $delta = 0) {
     $table = $entity_type . '__' . $field_name;
     $row = $field_name . '_value';
-    return $this->database->select($table, 't')
-      ->condition('entity_id', $entity_id)
+    $query = $this->database->select($table, 't')
+      ->fields('t', ['entity_id', $row])
       ->condition('deleted', 0)
-      ->condition('delta', $delta)
-      ->fields('t', [$row])
-      ->execute()
-      ->fetchField();
+      ->condition('delta', $delta);
+
+    if (is_array($entity_id)) {
+
+      // Circumvent memory limit exceptions.
+      if (count($entity_id) > 2000) {
+        $result = [];
+
+        $chunks = array_chunk($entity_id, 2000, TRUE);
+        foreach ($chunks as $chunk) {
+          $chunk_query = $this->database->select($table, 't')
+            ->fields('t', ['entity_id', $row])
+            ->condition('deleted', 0)
+            ->condition('delta', $delta)
+            ->condition('entity_id', $chunk, 'IN');
+          $fetch = $chunk_query->execute()->fetchAllKeyed(0, 1);
+          $result = $result + $fetch;
+        }
+      }
+      else {
+        $query->condition('entity_id', $entity_id, 'IN');
+        $fetch = $query->execute()->fetchAllKeyed(0, 1);
+        $result = $fetch;
+      }
+    }
+    else {
+      $query->condition('entity_id', $entity_id);
+      $fetch = $query->execute()->fetchField(1);
+      $result = $fetch;
+    }
+
+    return $result;
   }
 
 }
