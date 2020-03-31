@@ -144,7 +144,7 @@ trait FieldTrait {
     $options['display'] = $options['display'] ?? 'default';
     $options['multiple'] = $options['multiple'] ?? TRUE;
     if (!$entity instanceof FieldableEntityInterface
-        || !$entity->hasField($field_name)) {
+      || !$entity->hasField($field_name)) {
       return $result;
     }
     $field_item = $options['multiple']
@@ -174,8 +174,8 @@ trait FieldTrait {
    *
    * To be used for speed critical cases, use Node::load() otherwise.
    *
-   * @param int $entity_id
-   *   Entity id.
+   * @param int|array $entity_id
+   *   Entity id/ids.
    * @param string $field_name
    *   Name of the field.
    * @param string $entity_type
@@ -187,15 +187,31 @@ trait FieldTrait {
    *   Query result.
    */
   public function getFieldValueByIds($entity_id, $field_name, $entity_type = 'node', $delta = 0) {
-    $table = $entity_type . '__' . $field_name;
-    $row = $field_name . '_value';
-    return $this->database->select($table, 't')
-      ->condition('entity_id', $entity_id)
-      ->condition('deleted', 0)
-      ->condition('delta', $delta)
-      ->fields('t', [$row])
-      ->execute()
-      ->fetchField();
+    $entity_storage = $this->entityTypeManager->getStorage($entity_type);
+    $field_storage_definitions = $this->entityFieldManager->getFieldStorageDefinitions($entity_type);
+    $definition = $field_storage_definitions[$field_name];
+    $is_base = $definition->isBaseField();
+    $table_mapping = $entity_storage->getTableMapping($field_storage_definitions);
+    $table = $table_mapping->getFieldTableName($field_name);
+    $table_columns = $table_mapping->getAllColumns($table);
+    $entity_id = (array) $entity_id;
+    $query = $this->database->select($table, 't');
+    if (in_array('delta', $table_columns)) {
+      $query->condition('delta', $delta);
+    }
+    if ($is_base) {
+      $keys = $this->entityTypeManager->getDefinition($entity_type)->getKeys();
+      $query->fields('t', [$field_name]);
+      $query->condition($keys['id'], $entity_id, 'IN');
+    }
+    else {
+      $value_key = reset(array_keys($definition->getSchema()['columns']));
+      $field_mapping = $table_mapping->getFieldColumnName($definition, $value_key);
+      $query->fields('t', [$field_mapping]);
+      $query->condition('entity_id', $entity_id, 'IN');
+    }
+
+    return $query->execute()->fetchField();
   }
 
 }

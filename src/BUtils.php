@@ -8,8 +8,6 @@ use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
-use Drupal\Core\Language\LanguageManagerInterface;
-use Drupal\butils\Language\ButilsLanguageNegotiator;
 
 /**
  * Class BUtils.
@@ -30,7 +28,6 @@ class BUtils {
   use ParagraphsTrait;
   use StateTrait;
   use DomDocumentTrait;
-  use LanguageTrait;
 
   /**
    * Entity type manager.
@@ -75,20 +72,6 @@ class BUtils {
   protected $database;
 
   /**
-   * Language manager.
-   *
-   * @var \Drupal\Core\Language\LanguageManagerInterface
-   */
-  protected $languageManager;
-
-  /**
-   * BUtils language negotiator.
-   *
-   * @var \Drupal\butils\Language\ButilsLanguageNegotiator
-   */
-  protected $butilsLanguageNegotiator;
-
-  /**
    * Constructs a new BUtils object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -103,10 +86,6 @@ class BUtils {
    *   Renderer.
    * @param \Drupal\Core\Database\Driver\mysql\Connection $database
    *   Database connection.
-   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
-   *   Language manager.
-   * @param \Drupal\butils\Language\ButilsLanguageNegotiator $butils_language_negotiator
-   *   BUtils language negotiator.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -114,17 +93,13 @@ class BUtils {
     EntityDisplayRepository $entity_display_repository,
     StateInterface $state,
     RendererInterface $renderer,
-    Connection $database,
-    LanguageManagerInterface $language_manager,
-    ButilsLanguageNegotiator $butils_language_negotiator) {
+    Connection $database) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
     $this->entityDisplayRepository = $entity_display_repository;
     $this->state = $state;
     $this->renderer = $renderer;
     $this->database = $database;
-    $this->languageManager = $language_manager;
-    $this->butilsLanguageNegotiator = $butils_language_negotiator;
   }
 
 }
