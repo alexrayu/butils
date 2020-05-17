@@ -140,33 +140,66 @@ trait FieldTrait {
    *   Field value.
    */
   public function renderField(EntityInterface &$entity, $field_name, array $options = []) {
-    $result = '';
+    $field_build = $this->viewField($entity, $field_name, $options);
+
+    switch ($field_build['#field_type']) {
+      case 'file':
+      case 'image':
+        $result = (string) $this->renderer->renderRoot($field_build);
+        break;
+
+      default:
+        $result = strip_tags((string) $this->renderer->renderRoot($field_build));
+    }
+    $result = $this->cleanHtml($result);
+
+    return $result;
+  }
+
+  /**
+   * View field value without the wrappers and label.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity posessing the field.
+   * @param string $field_name
+   *   Field name.
+   * @param array $options
+   *   Render options.
+   *     - display: Render display mode. Default "default".
+   *     - multiple: Whether to render multivalue items. Default TRUE.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function viewField(EntityInterface &$entity, $field_name, array $options = []) {
     $options['display'] = $options['display'] ?? 'default';
     $options['multiple'] = $options['multiple'] ?? TRUE;
     if (!$entity instanceof FieldableEntityInterface
       || !$entity->hasField($field_name)) {
-      return $result;
+      return [];
     }
-    $field_item = $options['multiple']
-      ? $entity->{$field_name}
-      : $entity->{$field_name}->get(0);
+
+    // Build.
+    $field_item = $entity->{$field_name};
+    $field_build = [];
     if (!empty($field_item)) {
       $definition = $field_item->getFieldDefinition();
-      $field_type = $definition->get('field_type');
       $field_build = $field_item->view($options['display']);
+      $field_build['#field_type'] = $definition->get('field_type');
       $field_build['#label_display'] = 'hidden';
-      switch ($field_type) {
-        case 'file':
-        case 'image':
-          $result = (string) $this->renderer->renderRoot($field_build);
-          break;
-
-        default:
-          $result = strip_tags((string) $this->renderer->renderRoot($field_build));
-      }
-      $result = $this->cleanHtml($result);
     }
-    return $result;
+
+    // Reduce.
+    if (empty($options['multiple'])) {
+      $count = $field_item->count();
+      if ($count > 1) {
+        for ($x = 1; $x <= $count; $x++) {
+          unset($field_build[$x]);
+        }
+      }
+    }
+
+    return $field_build;
   }
 
   /**
@@ -205,7 +238,8 @@ trait FieldTrait {
       $query->condition($keys['id'], $entity_id, 'IN');
     }
     else {
-      $value_key = reset(array_keys($definition->getSchema()['columns']));
+      $columns = array_keys($definition->getSchema()['columns']);
+      $value_key = reset($columns);
       $field_mapping = $table_mapping->getFieldColumnName($definition, $value_key);
       $query->fields('t', [$field_mapping]);
       $query->condition('entity_id', $entity_id, 'IN');
