@@ -3,6 +3,8 @@
 namespace Drupal\butils;
 
 use Drupal\paragraphs\Entity\Paragraph;
+use Drupal\node\NodeInterface;
+use Drupal\paragraphs\ParagraphInterface;
 
 /**
  * Trait ParagraphsTrait.
@@ -36,6 +38,27 @@ trait ParagraphsTrait {
         $paragraph->delete();
       }
     }
+  }
+  
+  /**
+   * Gets paragraphs parent node.
+   *
+   * @param object $entity
+   *   Parent entity.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   Result.
+   */
+  public function paragraphParentNode($entity) {
+    if ($entity instanceof NodeInterface) {
+      return $entity;
+    }
+    elseif ($entity instanceof ParagraphInterface) {
+      $parent = $entity->getParentEntity();
+      return $this->paragraphParentNode($parent);
+    }
+
+    return NULL;
   }
 
 }
