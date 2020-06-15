@@ -28,6 +28,7 @@ class BUtils {
   use ParagraphsTrait;
   use StateTrait;
   use DomDocumentTrait;
+  use SqlQueryTrait;
 
   /**
    * Entity type manager.
