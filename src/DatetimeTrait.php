@@ -23,6 +23,11 @@ trait DatetimeTrait {
    *   Timestamp.
    */
   public function strToStamp($string, $timezone = 'UTC') {
+    $string = trim($string);
+    if (empty($string)) {
+      return 0;
+    }
+
     try {
       if (strpos($string, 'Z') === strlen($string)) {
         $string = substr($string, 0, -1);
@@ -50,13 +55,18 @@ trait DatetimeTrait {
    *   Datetime value.
    */
   public function strToDate($string, $timezone = 'UTC') {
+    $string = trim($string);
+    if (empty($string)) {
+      return NULL;
+    }
+
     try {
       $date = new \DateTime($string, new \DateTimeZone($timezone));
       $date->setTimezone(new \DateTimeZone('UTC'));
       return $date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
     }
     catch (\Exception $e) {
-      return 0;
+      return NULL;
     }
   }
 
@@ -76,6 +86,11 @@ trait DatetimeTrait {
    *   Timestamp value.
    */
   public function dateToStamp($string, $timezone = 'UTC', $timezone_to = NULL) {
+    $string = trim($string);
+    if (empty($string)) {
+      return 0;
+    }
+
     if (!$timezone_to) {
       $timezone_to = drupal_get_user_timezone();
     }
@@ -104,10 +119,15 @@ trait DatetimeTrait {
    * @param string $timezone_to
    *   The timezone to convert the value to.
    *
-   * @return int
-   *   Timestamp value.
+   * @return string
+   *   Formatted value.
    */
   public function dateToFormat($string, $format, $timezone = 'UTC', $timezone_to = NULL) {
+    $string = trim($string);
+    if (empty($string)) {
+      return NULL;
+    }
+
     if (!$timezone_to) {
       $timezone_to = drupal_get_user_timezone();
     }
@@ -121,7 +141,7 @@ trait DatetimeTrait {
       return \Drupal::service('date.formatter')->format($timestamp, $format);
     }
     catch (\Exception $e) {
-      return 0;
+      return NULL;
     }
   }
 
