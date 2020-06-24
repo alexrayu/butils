@@ -29,6 +29,7 @@ class BUtils {
   use StateTrait;
   use DomDocumentTrait;
   use SqlQueryTrait;
+  use UriTrait;
 
   /**
    * Entity type manager.
