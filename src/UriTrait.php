@@ -6,9 +6,9 @@ use Drupal\node\Entity\Node;
 use Drupal\Core\Url;
 
 /**
- * Trait Html.
+ * Trait Uri.
  *
- * Html related utils.
+ * Uri related utils.
  */
 trait UriTrait {
 
