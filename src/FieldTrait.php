@@ -107,7 +107,7 @@ trait FieldTrait {
    * @param bool $save
    *   Whether or not the entity should be saved at the end.
    */
-  public function emptyField(EntityInterface &$entity, $field_name, $save = TRUE) {
+  public function emptyField(EntityInterface $entity, $field_name, $save = TRUE) {
     if (!$entity instanceof FieldableEntityInterface || !$entity->hasField($field_name)) {
       return;
     }
@@ -139,7 +139,7 @@ trait FieldTrait {
    * @return string
    *   Field value.
    */
-  public function renderField(EntityInterface &$entity, $field_name, array $options = []) {
+  public function renderField(EntityInterface $entity, $field_name, array $options = []) {
     $field_build = $this->viewField($entity, $field_name, $options);
 
     switch ($field_build['#field_type']) {
@@ -171,7 +171,7 @@ trait FieldTrait {
    * @return array
    *   Build array.
    */
-  public function viewField(EntityInterface &$entity, $field_name, array $options = []) {
+  public function viewField(EntityInterface $entity, $field_name, array $options = []) {
     $options['display'] = $options['display'] ?? 'default';
     $options['multiple'] = $options['multiple'] ?? TRUE;
     if (!$entity instanceof FieldableEntityInterface
