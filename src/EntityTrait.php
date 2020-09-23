@@ -24,7 +24,7 @@ trait EntityTrait {
    *   Resulting entity.
    */
   public function toEntity($type, array $values) {
-    $query = \Drupal::entityQuery($type);
+    $query = $this->entityTypeManager->getStorage($type)->getQuery();
     foreach ($values as $key => $value) {
       $query->condition($key, $value);
     }

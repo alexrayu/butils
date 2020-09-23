@@ -60,7 +60,7 @@ trait TaxonomyTrait {
 
     // Get existing.
     $name = trim(strip_tags($name));
-    $res = \Drupal::entityQuery('taxonomy_term')
+    $res = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery()
       ->condition('vid', $vid)
       ->condition('name', $name)
       ->condition('langcode', $langcode)
@@ -107,7 +107,7 @@ trait TaxonomyTrait {
     // If final child exists, return it.
     $word = [end($parts)];
     if (!empty($word) && !empty($vid) && !empty($langcode)) {
-      $res = \Drupal::entityQuery('taxonomy_term')
+      $res = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery()
         ->condition('vid', $vid)
         ->condition('name', $word)
         ->condition('langcode', $langcode)
