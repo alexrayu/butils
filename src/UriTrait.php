@@ -23,7 +23,10 @@ trait UriTrait {
   public function uriToString($uri, array $options = []) {
     $uri_parts = parse_url($uri);
     $string = '';
-    if ($uri_parts['scheme'] === 'entity') {
+    if (empty($uri)) {
+      return '';
+    }
+    if (!empty($uri_parts['scheme']) && $uri_parts['scheme'] === 'entity') {
       $parts = explode('/', $uri_parts['path']);
       if ($parts[0] === 'node' && !empty($parts[1])) {
         $node = Node::load($parts[1]);
