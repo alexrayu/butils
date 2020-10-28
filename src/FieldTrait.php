@@ -135,6 +135,7 @@ trait FieldTrait {
    *   Render options.
    *     - display: Render display mode. Default "default".
    *     - multiple: Whether to render multivalue items. Default TRUE.
+   *     - full_html: Whether to render full html. Default FALSE.
    *
    * @return string
    *   Field value.
@@ -149,7 +150,10 @@ trait FieldTrait {
         break;
 
       default:
-        $result = strip_tags((string) $this->renderer->renderRoot($field_build));
+        $result = (string) $this->renderer->renderRoot($field_build);
+        if (empty($options['full_html'])) {
+          $result = strip_tags($result);
+        }
     }
     $result = $this->cleanHtml($result);
 
