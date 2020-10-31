@@ -22,6 +22,7 @@ class BUtils {
   use FieldTrait;
   use FileTrait;
   use HtmlTrait;
+  use ImageStyleTrait;
   use MediaTrait;
   use ParagraphsTrait;
   use SqlQueryTrait;
