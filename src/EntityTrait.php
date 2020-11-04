@@ -181,17 +181,39 @@ trait EntityTrait {
    *
    * @param string $entity_type
    *   Type of entity which view modes to get.
+   * @param string $bundle
+   *   Entity bundle if any. Required to get display settings.
    * @param bool $labels_only
    *   Whether to return only the labels, or actual view modes as well.
    *
    * @return array
    *   View modes.
    */
-  public function getViewModes($entity_type, $labels_only = TRUE) {
+  public function getViewModes($entity_type, $bundle = '', $labels_only = TRUE) {
+    if ($labels_only) {
+      return !empty($bundle)
+        ? $this->entityDisplayRepository->getViewModeOptionsByBundle($entity_type, $bundle)
+        : $this->entityDisplayRepository->getViewModeOptions($entity_type);
+    }
     $view_modes = [];
     $all_modes = $this->entityDisplayRepository->getViewModes($entity_type);
+    $bundle_modes = !empty($bundle)
+      ? $this->entityDisplayRepository->getViewModeOptionsByBundle($entity_type, $bundle)
+      : [];
+    $all_modes['default'] = [
+      'label' => 'Default',
+      'emulated' => TRUE,
+    ];
     foreach ($all_modes as $name => $mode) {
-      $view_modes[$name] = $labels_only ? $mode['label'] : $mode;
+      if (!empty($bundle_modes)) {
+        if (!empty($bundle_modes[$name]) || $name == 'default') {
+          $view_modes[$name] = $labels_only ? $mode['label'] : $mode;
+          $view_modes[$name]['display'] = $this->entityDisplayRepository->getViewDisplay($entity_type, $bundle, $name);
+        }
+      }
+      else {
+        $view_modes[$name] = $labels_only ? $mode['label'] : $mode;
+      }
     }
 
     return $view_modes;
