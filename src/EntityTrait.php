@@ -181,15 +181,17 @@ trait EntityTrait {
    *
    * @param string $entity_type
    *   Type of entity which view modes to get.
+   * @param bool $labels_only
+   *   Whether to return only the labels, or actual view modes as well.
    *
    * @return array
    *   View modes.
    */
-  public function getViewModes($entity_type) {
+  public function getViewModes($entity_type, $labels_only = TRUE) {
     $view_modes = [];
     $all_modes = $this->entityDisplayRepository->getViewModes($entity_type);
     foreach ($all_modes as $name => $mode) {
-      $view_modes[$name] = $mode['label'];
+      $view_modes[$name] = $labels_only ? $mode['label'] : $mode;
     }
 
     return $view_modes;
