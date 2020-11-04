@@ -214,4 +214,39 @@ trait EntityTrait {
     return $this->countWords($html);
   }
 
+  /**
+   * Builds a build array for an entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity to render and count words.
+   * @param string $view_mode
+   *   View mode to render in.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function entityBuild(EntityInterface $entity, $view_mode = 'default') {
+    return $this->entityTypeManager
+      ->getViewBuilder($entity->getEntityTypeId())
+      ->view($entity, $view_mode);
+  }
+
+  /**
+   * Renders an entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity to render and count words.
+   * @param string $view_mode
+   *   View mode to render in.
+   *
+   * @return string
+   *   Html output.
+   */
+  public function entityRender(EntityInterface $entity, $view_mode = 'default') {
+    $build = $this->entityTypeManager
+      ->getViewBuilder($entity->getEntityTypeId())
+      ->view($entity, $view_mode);
+    return $this->renderer->renderRoot($build);
+  }
+
 }
