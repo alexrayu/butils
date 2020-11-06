@@ -2,7 +2,7 @@
 
 namespace Drupal\butils;
 
-use Drupal\file\Entity\File;
+use Drupal\file\FileInterface;
 
 /**
  * Trait ImageStyleTrait.
@@ -46,7 +46,7 @@ trait ImageStyleTrait {
   /**
    * Flush all derivatives of a file's image style.
    *
-   * @param \Drupal\butils\File $file
+   * @param \Drupal\file\FileInterface $file
    *   File entity.
    * @param string $id
    *   Style name.
@@ -54,7 +54,7 @@ trait ImageStyleTrait {
    * @return bool
    *   Operation result.
    */
-  public function flushFileImageStyle(File $file, $id) {
+  public function flushFileImageStyle(FileInterface $file, $id) {
     $style = $this->entityTypeManager->getStorage('image_style')->load($id);
     if (!empty($style)) {
       $style->flush($file->getFileUri());
@@ -66,18 +66,49 @@ trait ImageStyleTrait {
   /**
    * Flush all derivatives a file's all image styles.
    *
-   * @param \Drupal\butils\File $file
+   * @param \Drupal\file\FileInterface $file
    *   File entity.
    *
    * @return bool
    *   Operation result.
    */
-  public function flushFileAllImageStyles(File $file) {
+  public function flushFileAllImageStyles(FileInterface $file) {
     $styles = $this->entityTypeManager->getStorage('image_style')->loadMultiple();
     $uri = $file->getFileUri();
     foreach ($styles as $style) {
       $style->flush($uri);
     }
+    return TRUE;
+  }
+
+  /**
+   * Rebuild derivatives for a file's image style.
+   *
+   * NOTE: Making sure the file is a valid image file is on you!
+   *
+   * @param \Drupal\file\FileInterface $file
+   *   File entity.
+   * @param array $styles
+   *   Image styles to rebuild. If empty, all will be rebuilt.
+   *
+   * @return bool
+   *   Operation result.
+   */
+  public function rebuildImageStyles(FileInterface $file, array $styles = []) {
+    $image_uri = $file->getFileUri();
+    $all_styles = $this->entityTypeManager->getStorage('image_style')->loadMultiple();
+    if (empty($styles)) {
+      $styles = array_keys($all_styles);
+    }
+    foreach ($styles as $name) {
+      if (empty($all_styles[$name])) {
+        continue;
+      }
+      $style = $all_styles[$name];
+      $destination = $style->buildUri($image_uri);
+      $style->createDerivative($image_uri, $destination);
+    }
+
     return TRUE;
   }
 

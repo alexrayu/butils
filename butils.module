@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Implements hook_help().
@@ -22,4 +23,32 @@ function butils_help($route_name, RouteMatchInterface $route_match) {
 
     default:
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function butils_node_insert(EntityInterface $entity) {
+  return butils_handle_node_save($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function butils_node_update(EntityInterface $entity) {
+  return butils_handle_node_save($entity);
+}
+
+/**
+ * Node save hook handler.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   Node entity.
+ *
+ * @return \Drupal\Core\Entity\EntityInterface
+ *   Node entity.
+ */
+function butils_handle_node_save(EntityInterface $entity) {
+  \Drupal::moduleHandler()->invokeAll('node_save', [$entity]);
+  return $entity;
 }
