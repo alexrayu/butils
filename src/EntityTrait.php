@@ -24,7 +24,7 @@ trait EntityTrait {
    *   Resulting entity.
    */
   public function toEntity($type, array $values) {
-    $query = \Drupal::entityQuery($type);
+    $query = $this->entityTypeManager->getStorage($type)->getQuery();
     foreach ($values as $key => $value) {
       $query->condition($key, $value);
     }
@@ -181,15 +181,39 @@ trait EntityTrait {
    *
    * @param string $entity_type
    *   Type of entity which view modes to get.
+   * @param string $bundle
+   *   Entity bundle if any. Required to get display settings.
+   * @param bool $labels_only
+   *   Whether to return only the labels, or actual view modes as well.
    *
    * @return array
    *   View modes.
    */
-  public function getViewModes($entity_type) {
+  public function getViewModes($entity_type, $bundle = '', $labels_only = TRUE) {
+    if ($labels_only) {
+      return !empty($bundle)
+        ? $this->entityDisplayRepository->getViewModeOptionsByBundle($entity_type, $bundle)
+        : $this->entityDisplayRepository->getViewModeOptions($entity_type);
+    }
     $view_modes = [];
     $all_modes = $this->entityDisplayRepository->getViewModes($entity_type);
+    $bundle_modes = !empty($bundle)
+      ? $this->entityDisplayRepository->getViewModeOptionsByBundle($entity_type, $bundle)
+      : [];
+    $all_modes['default'] = [
+      'label' => 'Default',
+      'emulated' => TRUE,
+    ];
     foreach ($all_modes as $name => $mode) {
-      $view_modes[$name] = $mode['label'];
+      if (!empty($bundle_modes)) {
+        if (!empty($bundle_modes[$name]) || $name == 'default') {
+          $view_modes[$name] = $labels_only ? $mode['label'] : $mode;
+          $view_modes[$name]['display'] = $this->entityDisplayRepository->getViewDisplay($entity_type, $bundle, $name);
+        }
+      }
+      else {
+        $view_modes[$name] = $labels_only ? $mode['label'] : $mode;
+      }
     }
 
     return $view_modes;
@@ -212,6 +236,41 @@ trait EntityTrait {
       ->view($entity, $view_mode);
     $html = $this->renderer->renderRoot($build);
     return $this->countWords($html);
+  }
+
+  /**
+   * Builds a build array for an entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity to render and count words.
+   * @param string $view_mode
+   *   View mode to render in.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function entityBuild(EntityInterface $entity, $view_mode = 'default') {
+    return $this->entityTypeManager
+      ->getViewBuilder($entity->getEntityTypeId())
+      ->view($entity, $view_mode);
+  }
+
+  /**
+   * Renders an entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity to render and count words.
+   * @param string $view_mode
+   *   View mode to render in.
+   *
+   * @return string
+   *   Html output.
+   */
+  public function entityRender(EntityInterface $entity, $view_mode = 'default') {
+    $build = $this->entityTypeManager
+      ->getViewBuilder($entity->getEntityTypeId())
+      ->view($entity, $view_mode);
+    return $this->renderer->renderRoot($build);
   }
 
 }

@@ -15,22 +15,23 @@ use Drupal\Core\Database\Driver\mysql\Connection;
  * Back end Utils.
  */
 class BUtils {
-
   use ArrayTrait;
   use DatetimeTrait;
+  use DomDocumentTrait;
   use EntityTrait;
   use FieldTrait;
   use FileTrait;
   use HtmlTrait;
+  use ImageStyleTrait;
+  use MediaTrait;
+  use ParagraphsTrait;
+  use SqlQueryTrait;
+  use StateTrait;
   use StringTrait;
   use TaxonomyTrait;
-  use XmlTrait;
-  use ParagraphsTrait;
-  use StateTrait;
-  use DomDocumentTrait;
-  use SqlQueryTrait;
   use UriTrait;
   use UserTrait;
+  use XmlTrait;
 
   /**
    * Entity type manager.
