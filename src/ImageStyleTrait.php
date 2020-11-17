@@ -2,7 +2,7 @@
 
 namespace Drupal\butils;
 
-use Drupal\file\FileInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
  * Trait ImageStyleTrait.
@@ -46,7 +46,7 @@ trait ImageStyleTrait {
   /**
    * Flush all derivatives of a file's image style.
    *
-   * @param \Drupal\file\FileInterface $file
+   * @param \Drupal\Core\Entity\EntityInterface $file
    *   File entity.
    * @param string $id
    *   Style name.
@@ -54,7 +54,7 @@ trait ImageStyleTrait {
    * @return bool
    *   Operation result.
    */
-  public function flushFileImageStyle(FileInterface $file, $id) {
+  public function flushFileImageStyle(EntityInterface $file, $id) {
     $style = $this->entityTypeManager->getStorage('image_style')->load($id);
     if (!empty($style)) {
       $style->flush($file->getFileUri());
@@ -66,13 +66,13 @@ trait ImageStyleTrait {
   /**
    * Flush all derivatives a file's all image styles.
    *
-   * @param \Drupal\file\FileInterface $file
+   * @param \Drupal\Core\Entity\EntityInterface $file
    *   File entity.
    *
    * @return bool
    *   Operation result.
    */
-  public function flushFileAllImageStyles(FileInterface $file) {
+  public function flushFileAllImageStyles(EntityInterface $file) {
     $styles = $this->entityTypeManager->getStorage('image_style')->loadMultiple();
     $uri = $file->getFileUri();
     foreach ($styles as $style) {
@@ -86,7 +86,7 @@ trait ImageStyleTrait {
    *
    * NOTE: Making sure the file is a valid image file is on you!
    *
-   * @param \Drupal\file\FileInterface $file
+   * @param \Drupal\Core\Entity\EntityInterface $file
    *   File entity.
    * @param array $styles
    *   Image styles to rebuild. If empty, all will be rebuilt.
@@ -94,7 +94,7 @@ trait ImageStyleTrait {
    * @return bool
    *   Operation result.
    */
-  public function rebuildImageStyles(FileInterface $file, array $styles = []) {
+  public function rebuildImageStyles(EntityInterface $file, array $styles = []) {
     $image_uri = $file->getFileUri();
     $all_styles = $this->entityTypeManager->getStorage('image_style')->loadMultiple();
     if (empty($styles)) {
