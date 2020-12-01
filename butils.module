@@ -71,8 +71,16 @@ function butils_page_entity() {
   $params = $route->getParameters()->all();
   foreach ($types as $type) {
     if (!empty($params[$type])) {
-      $page_entity = $params[$type];
-      return $page_entity;
+      if (is_string($params[$type])) {
+        $page_entity = \Drupal::entityTypeManager()->getStorage($type)->load($params[$type]);
+      }
+      else {
+        $page_entity = $params[$type];
+      }
+
+      if ($page_entity instanceof EntityInterface) {
+        return $page_entity;
+      }
     }
   }
 
