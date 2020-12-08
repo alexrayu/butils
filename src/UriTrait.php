@@ -23,7 +23,7 @@ trait UriTrait {
   public function uriToString($uri, array $options = []) {
     $uri_parts = parse_url($uri);
     $string = '';
-    if (empty($uri)) {
+    if (empty($uri) || $uri_parts == FALSE) {
       return '';
     }
     if (!empty($uri_parts['scheme']) && $uri_parts['scheme'] === 'entity') {
