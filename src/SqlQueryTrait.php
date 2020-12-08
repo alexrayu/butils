@@ -20,11 +20,13 @@ trait SqlQueryTrait {
    */
   public function sqlQueryToString($query) {
     $query_string = $query->__toString();
-    $args = $query->getArguments();
-    foreach ($args as $placeholder => $arg) {
-      $query_string = str_replace($placeholder, '"' . $arg . '"', $query_string);
+    if (method_exists($query, 'getArguments')) {
+      $args = $query->getArguments();
+      foreach ($args as $placeholder => $arg) {
+        $query_string = str_replace($placeholder, '"' . $arg . '"', $query_string);
+      }
+      $query_string = str_replace(['{', '}'], '', $query_string);
     }
-    $query_string = str_replace(['{', '}'], '', $query_string);
 
     return $query_string;
   }
