@@ -28,12 +28,27 @@ trait CsvTrait {
     $new_key = FALSE;
     $pos_id = 0;
     if ($handle = fopen($path, 'r')) {
-      $header = fgetcsv($handle);
-      if (empty($key_id) || array_search($key_id, $header) === FALSE) {
-        $new_key = TRUE;
-        $key_id = 'csv_uuid';
-        array_unshift($header, $key_id);
+
+      // Get or calculate the header.
+      if (($fragment = fgetcsv($handle)) !== FALSE) {
+        $header = $fragment;
+        if (!empty($key_id)) {
+          if (array_search($key_id, $header) === FALSE) {
+            $new_key = TRUE;
+            $key_id = 'csv_uuid';
+            array_unshift($header, $key_id);
+            rewind($handle);
+          }
+        }
+        else {
+          $header = array_keys($fragment);
+          $new_key = TRUE;
+          $key_id = 'csv_uuid';
+          array_unshift($header, $key_id);
+          rewind($handle);
+        }
       }
+
       while (($fragment = fgetcsv($handle)) !== FALSE) {
         if ($new_key) {
           array_unshift($fragment, $pos_id);
@@ -67,7 +82,7 @@ trait CsvTrait {
    */
   public function saveCsv($path, array $data, array $header = []):bool {
     if (!empty($header)) {
-      array_unshift($header, $data);
+      array_unshift($data, $header);
     }
     $pathinfo = pathinfo($path);
     $this->fileSystem->prepareDirectory($pathinfo['dirname'], FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
