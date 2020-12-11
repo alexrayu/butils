@@ -108,7 +108,8 @@ class BUtils {
     EntityDisplayRepository $entity_display_repository,
     StateInterface $state,
     RendererInterface $renderer,
-    Connection $database) {
+    Connection $database,
+    FileSystemInterface $file_system) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
     $this->entityDisplayRepository = $entity_display_repository;
