@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\Core\File\FileSystemInterface;
 
 /**
  * Class BUtils.
@@ -16,6 +17,7 @@ use Drupal\Core\Database\Driver\mysql\Connection;
  */
 class BUtils {
   use ArrayTrait;
+  use CsvTrait;
   use DatetimeTrait;
   use DomDocumentTrait;
   use EntityTrait;
@@ -76,6 +78,13 @@ class BUtils {
   protected $database;
 
   /**
+   * FileSystem service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * Constructs a new BUtils object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -90,6 +99,8 @@ class BUtils {
    *   Renderer.
    * @param \Drupal\Core\Database\Driver\mysql\Connection $database
    *   Database connection.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   FileSystem service.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -97,13 +108,15 @@ class BUtils {
     EntityDisplayRepository $entity_display_repository,
     StateInterface $state,
     RendererInterface $renderer,
-    Connection $database) {
+    Connection $database,
+    FileSystemInterface $file_system) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
     $this->entityDisplayRepository = $entity_display_repository;
     $this->state = $state;
     $this->renderer = $renderer;
     $this->database = $database;
+    $this->fileSystem = $file_system;
   }
 
 }
