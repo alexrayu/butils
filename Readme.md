@@ -13,6 +13,12 @@ Contains helper functions for array handling.
 
 This function can be used if existance of the path is not certain.
 
+### CSV
+Contains hekper functions for working with CSV files.
+
+- **loadCsv()** - Loads a CSV file into an array using header keys as array keys.
+- **writeCsv()** - Writes an array into a CSV file.
+
 ### DateTime
 Contains helper functions for datetime transcoding and formatting.
 
@@ -24,6 +30,11 @@ fields.
 - **dateToStamp()** - Convert date to timestamp with time zone in mind.
 
 - **dateToFormat()** - Formats the datetime string with time zone in mind.
+
+###DomDocument
+DomDocument related utilities.
+
+- **domNodeInnerHtml()** - Get the inner html of a node without parent tag.
 
 ### Entity
 Contains entity related helper functions.
@@ -38,10 +49,16 @@ Example: ```field_attached_file.0.field_caption```.
 
 - **getViewModes()** - Gets the entity's enabled view modes.
 
-- **emptyField()** - Empties the field correctly, by removing the field instance.
+- **entityCountWords()** - Counts words in an entity build using a view mode.
+
+- **entityBuild()** - Build an entity render array using a view mode.
+
+- **entityRender()** - Renders an entity using a view mode.
 
 ### Field
 Helper functions for working with fields.
+
+- **emptyField()** - Empties the field correctly, by removing the field instance.
 
 - **getFieldDefinitions()** - Gets all field definitions of an entity type and
 bundle. Can be used to check what fields of what type the bundle has.
