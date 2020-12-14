@@ -58,14 +58,22 @@ Example: ```field_attached_file.0.field_caption```.
 ### Field
 Helper functions for working with fields.
 
-- **emptyField()** - Empties the field correctly, by removing the field instance.
-
 - **getFieldDefinitions()** - Gets all field definitions of an entity type and
 bundle. Can be used to check what fields of what type the bundle has.
 
 - **getFieldDefinitionsDetails()** - Gets additional information for the field
 definition. Parameter is an array with field definition array, field name 
 (details of whitch need to be loaded), entity type, and bundle.
+
+- **emptyField()** - Empties the field correctly, by removing the field instance.
+
+- **viewField()** - Get a build array of a field of an entity without wrappers
+ and labels.
+
+- **renderField()** - Render a field of an entity without wrappers and labels.
+
+- **getFieldValueByIds()** - Gets vaelue of a field of an entity without loading
+the entity. Use with caution, do not use in blanket operations!
 
 ### File
 Helper functions to work with files.
@@ -84,6 +92,25 @@ breaks, multiple subsequent CR and LF elements.
 
 - **htmlToText()** - A wrapper around Drupal's function that converts HTML to text
 preserving the document's look where possible (not just strip_tags()).
+  
+- **truncateHtml()** - Truncates a html string to a number of characters or words.
+
+- **stripLinks()** - Strips links but preserve their text labels.
+
+- **countWords()** - Counts words in a html string or plain text.
+
+### ImageStyle
+Contains helper functions to work with Drupal 8 image styles.
+
+- **flushImageStyle()** - Flushes a specific Drupal 8 image style derivatives.
+
+- **flushAllImageStyles()** - Flushes derivatives for all Drupal 8 image styles.
+
+- **flushFileImageStyle()** - Flush the image style derivative of an image file.
+
+- **flushFileAllImageStyles()** - Flash all image style derivatives of an image file.
+
+- **rebuildImageStyles()** - Flush and rebuild image style derivatives for a file.
 
 ### String
 String related functions.
