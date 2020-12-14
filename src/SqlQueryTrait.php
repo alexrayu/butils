@@ -5,7 +5,7 @@ namespace Drupal\butils;
 /**
  * SQL Query trait.
  *
- * Field related utils.
+ * SQL Query related helper functions.
  */
 trait SqlQueryTrait {
 

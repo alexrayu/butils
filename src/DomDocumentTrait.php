@@ -5,7 +5,7 @@ namespace Drupal\butils;
 /**
  * Trait DomDocument.
  *
- * Taxonomy related utils.
+ * DomDocument related utils.
  */
 trait DomDocumentTrait {
 
