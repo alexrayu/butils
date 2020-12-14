@@ -5,7 +5,7 @@ namespace Drupal\butils;
 /**
  * Trait State.
  *
- * Html related utils.
+ * State API related utils.
  */
 trait StateTrait {
 

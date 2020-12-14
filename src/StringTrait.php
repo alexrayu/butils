@@ -5,7 +5,7 @@ namespace Drupal\butils;
 /**
  * Trait String.
  *
- * Html related utils.
+ * String handling utils.
  */
 trait StringTrait {
 

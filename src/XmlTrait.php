@@ -7,7 +7,7 @@ use Symfony\Component\Serializer\Encoder\XmlEncoder;
 /**
  * Trait Xml.
  *
- * Taxonomy related utils.
+ * XML related helper functions.
  */
 trait XmlTrait {
 

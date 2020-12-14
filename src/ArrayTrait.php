@@ -5,7 +5,7 @@ namespace Drupal\butils;
 /**
  * Trait Array.
  *
- * Taxonomy related utils.
+ * Array handling helper functions.
  */
 trait ArrayTrait {
 
