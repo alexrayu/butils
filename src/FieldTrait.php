@@ -125,42 +125,6 @@ trait FieldTrait {
   }
 
   /**
-   * Renders field value without the wrappers and label.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   Entity posessing the field.
-   * @param string $field_name
-   *   Field name.
-   * @param array $options
-   *   Render options.
-   *     - display: Render display mode. Default "default".
-   *     - multiple: Whether to render multivalue items. Default TRUE.
-   *     - full_html: Whether to render full html. Default FALSE.
-   *
-   * @return string
-   *   Field value.
-   */
-  public function renderField(EntityInterface $entity, $field_name, array $options = []) {
-    $field_build = $this->viewField($entity, $field_name, $options);
-
-    switch ($field_build['#field_type']) {
-      case 'file':
-      case 'image':
-        $result = (string) $this->renderer->renderRoot($field_build);
-        break;
-
-      default:
-        $result = (string) $this->renderer->renderRoot($field_build);
-        if (empty($options['full_html'])) {
-          $result = strip_tags($result);
-        }
-    }
-    $result = $this->cleanHtml($result);
-
-    return $result;
-  }
-
-  /**
    * View field value without the wrappers and label.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
@@ -204,6 +168,42 @@ trait FieldTrait {
     }
 
     return $field_build;
+  }
+
+  /**
+   * Renders field value without the wrappers and label.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity posessing the field.
+   * @param string $field_name
+   *   Field name.
+   * @param array $options
+   *   Render options.
+   *     - display: Render display mode. Default "default".
+   *     - multiple: Whether to render multivalue items. Default TRUE.
+   *     - full_html: Whether to render full html. Default FALSE.
+   *
+   * @return string
+   *   Field value.
+   */
+  public function renderField(EntityInterface $entity, $field_name, array $options = []) {
+    $field_build = $this->viewField($entity, $field_name, $options);
+
+    switch ($field_build['#field_type']) {
+      case 'file':
+      case 'image':
+        $result = (string) $this->renderer->renderRoot($field_build);
+        break;
+
+      default:
+        $result = (string) $this->renderer->renderRoot($field_build);
+        if (empty($options['full_html'])) {
+          $result = strip_tags($result);
+        }
+    }
+    $result = $this->cleanHtml($result);
+
+    return $result;
   }
 
   /**
