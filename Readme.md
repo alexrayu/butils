@@ -112,8 +112,27 @@ Contains helper functions to work with Drupal 8 image styles.
 
 - **rebuildImageStyles()** - Flush and rebuild image style derivatives for a file.
 
+### Media
+Contains helper functions to work with Drupal 8 core media.
+
+- **mediaByFid()** - Find the media entity by it's file id.
+
+### Paragraphs
+Drupal 8 Paragraphs related helper functions and utilities.
+
+- **deleteParagraphsRecurively()** - Deletes nested paragraphs recursively.
+
+- **paragraphParentNode()** - Get the paragraph's parent node even for nested
+paragraphs, recursively.
+  
+### SqlQuery
+Drupal 8 SqlQuery related helper functions.
+
+- **sqlQueryToString()** - Converts SQL Query to string in cases when the usual
+**$query->toString()** does not cut it.
+
 ### String
-String related functions.
+String related helperfunctions.
 
 - **cleanString()** - Remove non-UTF characters form string.
 
