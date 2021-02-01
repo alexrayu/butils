@@ -61,28 +61,5 @@ function butils_handle_node_save(EntityInterface $entity) {
  *   Current page main entity.
  */
 function butils_page_entity() {
-  $page_entity = &drupal_static(__FUNCTION__, NULL);
-  if (!empty($page_entity)) {
-    return $page_entity;
-  }
-  $types = array_keys(\Drupal::entityTypeManager()->getDefinitions());
-  $route = \Drupal::routeMatch();
-  $page_entity = NULL;
-  $params = $route->getParameters()->all();
-  foreach ($types as $type) {
-    if (!empty($params[$type])) {
-      if (is_string($params[$type])) {
-        $page_entity = \Drupal::entityTypeManager()->getStorage($type)->load($params[$type]);
-      }
-      else {
-        $page_entity = $params[$type];
-      }
-
-      if ($page_entity instanceof EntityInterface) {
-        return $page_entity;
-      }
-    }
-  }
-
-  return NULL;
+  return \Drupal::service('butils')->currentEntity();
 }

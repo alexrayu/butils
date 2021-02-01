@@ -9,3 +9,8 @@ services:
       - '@renderer'
       - '@database'
       - '@file_system'
+      - '@language_manager'
+      - '@current_route_match'
+      - '@request_stack'
+      - '@current_user'
+      - '@path.matcher'
