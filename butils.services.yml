@@ -13,3 +13,4 @@ services:
       - '@current_route_match'
       - '@request_stack'
       - '@current_user'
+      - '@path.matcher'

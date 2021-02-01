@@ -83,4 +83,24 @@ trait CurrentTrait {
     return $this->requestStack->getCurrentRequest();
   }
 
+  /**
+   * Get the current path.
+   *
+   * @return \Drupal\Core\Path\PathMatcherInterface
+   *   Current path.
+   */
+  public function currentPath() {
+    return $this->pathMatcher;
+  }
+
+  /**
+   * Get whether the current page is front page.
+   *
+   * @return bool
+   *   Check result.
+   */
+  public function isFrontPage() {
+    return $this->pathMatcher->isFrontPage();
+  }
+
 }

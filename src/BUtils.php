@@ -13,6 +13,7 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Path\PathMatcherInterface;
 
 /**
  * Class BUtils.
@@ -118,6 +119,13 @@ class BUtils {
   protected $currentUser;
 
   /**
+   * Path matcher.
+   *
+   * @var \Drupal\Core\Path\PathMatcherInterface
+   */
+  protected $pathMatcher;
+
+  /**
    * Constructs a new BUtils object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -142,6 +150,8 @@ class BUtils {
    *   Request stack.
    * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
    *   Current account.
+   * @param \Drupal\Core\Path\PathMatcherInterface $path_matcher
+   *   Path matcher.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -154,7 +164,8 @@ class BUtils {
     LanguageManagerInterface $language_manager,
     RouteMatchInterface $route_match,
     RequestStack $request_stack,
-    AccountProxyInterface $account_proxy) {
+    AccountProxyInterface $account_proxy,
+    PathMatcherInterface $path_matcher) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
     $this->entityDisplayRepository = $entity_display_repository;
@@ -166,6 +177,7 @@ class BUtils {
     $this->routeMatch = $route_match;
     $this->requestStack = $request_stack;
     $this->currentUser = $account_proxy;
+    $this->pathMatcher = $path_matcher;
   }
 
 }
