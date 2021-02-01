@@ -39,18 +39,5 @@ trait UserTrait {
 
     return !empty(array_intersect($roles, $rids));
   }
-  
-   /**
-   * Check whether user is an admin.
-   *
-   * @param int|\Drupal\Core\Session\AccountInterface $account
-   *   User id or user account.
-   *
-   * @return bool
-   *   Check result.
-   */
-  public function isAdmin($account) {
-    return $this->userAccessRoles($account, ['administrator']);
-  }
 
 }
