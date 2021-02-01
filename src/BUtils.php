@@ -9,6 +9,10 @@ use Drupal\Core\State\StateInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Database\Driver\mysql\Connection;
 use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Drupal\Core\Session\AccountProxyInterface;
 
 /**
  * Class BUtils.
@@ -18,6 +22,7 @@ use Drupal\Core\File\FileSystemInterface;
 class BUtils {
   use ArrayTrait;
   use CsvTrait;
+  use CurrentTrait;
   use DatetimeTrait;
   use DomDocumentTrait;
   use EntityTrait;
@@ -85,6 +90,34 @@ class BUtils {
   protected $fileSystem;
 
   /**
+   * Language manager.
+   *
+   * @var \Drupal\Core\Language\LanguageManagerInterface
+   */
+  protected $languageManager;
+
+  /**
+   * Current route match.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
+   * Request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
+   * Current user.
+   *
+   * @var \Drupal\Core\Session\AccountProxyInterface
+   */
+  protected $currentUser;
+
+  /**
    * Constructs a new BUtils object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -101,6 +134,14 @@ class BUtils {
    *   Database connection.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   FileSystem service.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
+   *   Language manager.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   Route matcher.
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+   *   Request stack.
+   * @param \Drupal\Core\Session\AccountProxyInterface $account_proxy
+   *   Current account.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -109,7 +150,11 @@ class BUtils {
     StateInterface $state,
     RendererInterface $renderer,
     Connection $database,
-    FileSystemInterface $file_system) {
+    FileSystemInterface $file_system,
+    LanguageManagerInterface $language_manager,
+    RouteMatchInterface $route_match,
+    RequestStack $request_stack,
+    AccountProxyInterface $account_proxy) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
     $this->entityDisplayRepository = $entity_display_repository;
@@ -117,6 +162,10 @@ class BUtils {
     $this->renderer = $renderer;
     $this->database = $database;
     $this->fileSystem = $file_system;
+    $this->languageManager = $language_manager;
+    $this->routeMatch = $route_match;
+    $this->requestStack = $request_stack;
+    $this->currentUser = $account_proxy;
   }
 
 }
