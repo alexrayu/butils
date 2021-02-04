@@ -102,5 +102,15 @@ trait CurrentTrait {
   public function isFrontPage() {
     return $this->pathMatcher->isFrontPage();
   }
+  
+  /**
+   * Check if the current page is Layout Builder page.
+   *
+   * @return bool
+   *   Check result.
+   */
+  public function isBuilder() {
+    return strpos($this->routeMatch->getRouteName(), 'layout_builder') === 0;
+  }
 
 }
