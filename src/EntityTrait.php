@@ -273,4 +273,63 @@ trait EntityTrait {
     return $this->renderer->renderRoot($build);
   }
 
+  /**
+   * Loads entity of type by id.
+   *
+   * @param string $type
+   *   Entity type.
+   * @param string $id
+   *   Entity id.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   */
+  public function entityLoad($type, $id) {
+    return $this->entityTypeManager->getStorage($type)->load($id);
+  }
+
+  /**
+   * Get entity query by type.
+   *
+   * @param string $type
+   *   Entity type.
+   *
+   * @return \Drupal\Core\Entity\Query\QueryInterface|null
+   */
+  public function entityQuery($type) {
+    return $this->entityTypeManager->getStorage($type)->getQuery();
+  }
+
+  /**
+   * Check existance of entity type.
+   *
+   * @param string $type
+   *   Entity type.
+   *
+   * @return bool
+   *   Operation result.
+   */
+  public function entityTypeExists($type) {
+    return $this->entityTypeManager->hasDefinition($type);
+  }
+
+  /**
+   * Check existance of entity of type by id.
+   *
+   * @param string $type
+   *   Entity type.
+   * @param string $id
+   *   Entity id.
+   *
+   * @return bool
+   *   Operation result.
+   */
+  public function entityExists($type, $id) {
+    if (!$this->entityTypeExists($type)) {
+      return FALSE;
+    }
+    $query = $this->entityQuery($type);
+    $key = $this->entityTypeManager->getDefinition($type)->getKey('id');
+    return (!empty($query->condition($key, $id)->execute()));
+  }
+
 }
