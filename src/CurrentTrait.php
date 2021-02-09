@@ -23,6 +23,9 @@ trait CurrentTrait {
       return $page_entity;
     }
     $types = array_keys($this->entityTypeManager->getDefinitions());
+    $types = array_merge($types, [
+      'node_preview',
+    ]);
     $page_entity = NULL;
     $params = $this->routeMatch->getParameters()->all();
     foreach ($types as $type) {
@@ -102,7 +105,7 @@ trait CurrentTrait {
   public function isFrontPage() {
     return $this->pathMatcher->isFrontPage();
   }
-  
+
   /**
    * Check if the current page is Layout Builder page.
    *
