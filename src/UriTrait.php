@@ -26,13 +26,18 @@ trait UriTrait {
     if (empty($uri) || $uri_parts == FALSE) {
       return '';
     }
-    if (!empty($uri_parts['scheme']) && $uri_parts['scheme'] === 'entity') {
-      $parts = explode('/', $uri_parts['path']);
-      if ($parts[0] === 'node' && !empty($parts[1])) {
-        $node = Node::load($parts[1]);
-        if (!empty($node)) {
-          $string = $node->toUrl()->setAbsolute()->toString();
+    if (!empty($uri_parts['scheme'])) {
+      if ($uri_parts['scheme'] === 'entity') {
+        $parts = explode('/', $uri_parts['path']);
+        if ($parts[0] === 'node' && !empty($parts[1])) {
+          $node = Node::load($parts[1]);
+          if (!empty($node)) {
+            $string = $node->toUrl()->setAbsolute()->toString();
+          }
         }
+      }
+      else {
+        $string = $uri;
       }
     }
     if (empty($string)) {
