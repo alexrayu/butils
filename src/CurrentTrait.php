@@ -53,7 +53,7 @@ trait CurrentTrait {
    *   Current language.
    */
   public function currentLanguage() {
-    return $this->currentLanguage();
+    return $this->languageManager->getCurrentLanguage();
   }
 
   /**
@@ -63,7 +63,7 @@ trait CurrentTrait {
    *   Current user account.
    */
   public function currentUser() {
-    return $this->currentUser();
+    return $this->currentUser;
   }
 
   /**
