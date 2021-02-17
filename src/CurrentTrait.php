@@ -3,6 +3,7 @@
 namespace Drupal\butils;
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Language\LanguageInterface;
 
 /**
  * Trait Current.
@@ -53,7 +54,7 @@ trait CurrentTrait {
    *   Current language.
    */
   public function currentLanguage() {
-    return $this->languageManager->getCurrentLanguage();
+    return $this->languageManager->getCurrentLanguage(LanguageInterface::TYPE_CONTENT);
   }
 
   /**
