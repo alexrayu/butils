@@ -39,8 +39,10 @@ trait ArrayTrait {
         return $temp_data;
       }
     }
+
+    return FALSE;
   }
-  
+
   /**
    * Generates a diff between two arrays.
    *
@@ -52,8 +54,8 @@ trait ArrayTrait {
    * @return array
    *   The diff.
    */
-  public function arrayDiff($array1, $array2){
-    $result = array();
+  public function arrayDiff(array $array1, array $array2) {
+    $result = [];
 
     foreach ($array1 as $key => $val) {
       if (is_array($val) && isset($array2[$key])) {

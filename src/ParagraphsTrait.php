@@ -39,7 +39,7 @@ trait ParagraphsTrait {
       }
     }
   }
-  
+
   /**
    * Gets paragraphs parent node.
    *
