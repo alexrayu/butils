@@ -2,6 +2,8 @@
 
 namespace Drupal\butils;
 
+use Drupal\media\MediaInterface;
+
 /**
  * Trait Media.
  *
@@ -24,6 +26,24 @@ trait MediaTrait {
     return $this->entityTypeManager->getStorage('media')->getQuery()
       ->condition($field_name, $fid)
       ->execute();
+  }
+
+  /**
+   * Get the media's main file object.
+   *
+   * @param \Drupal\media\MediaInterface|null $media
+   *   Media object.
+   *
+   * @return \Drupal\file\FileInterface|null
+   *   File if any.
+   */
+  public function mediaFile($media) {
+    if (empty($media)) {
+      return NULL;
+    }
+    return $this->entityTypeManager->getStorage('file')->load(
+      $media->getSource()->getSourceFieldValue($media)
+    );
   }
 
 }
