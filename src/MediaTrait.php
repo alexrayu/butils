@@ -2,8 +2,6 @@
 
 namespace Drupal\butils;
 
-use Drupal\media\MediaInterface;
-
 /**
  * Trait Media.
  *
