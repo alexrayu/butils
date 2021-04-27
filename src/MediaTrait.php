@@ -26,4 +26,25 @@ trait MediaTrait {
       ->execute();
   }
 
+  /**
+   * Get the media's main file object.
+   *
+   * @param \Drupal\media\MediaInterface|string $media
+   *   Media object.
+   *
+   * @return \Drupal\file\FileInterface|null
+   *   File if any.
+   */
+  public function mediaFile($media) {
+    if (is_numeric($media) || is_string($media)) {
+      $media = $this->entityTypeManager->getStorage('media')->load($media);
+    }
+    if (empty($media)) {
+      return NULL;
+    }
+    return $this->entityTypeManager->getStorage('file')->load(
+      $media->getSource()->getSourceFieldValue($media)
+    );
+  }
+
 }

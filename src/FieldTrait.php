@@ -251,5 +251,46 @@ trait FieldTrait {
 
     return $query->execute()->fetchField();
   }
+  
+  /**
+   * A hack to empty a field value without a Node::save().
+   *
+   * To be used for speed critical cases, use Node::save() otherwise.
+   * Will not handle cache invalidation.
+   *
+   * @param int|array $entity_id
+   *   Entity id/ids.
+   * @param string $field_name
+   *   Name of the field.
+   * @param string $entity_type
+   *   Entity type machine string, like "node".
+   *
+   * @return int
+   *   Number of deleted rows.
+   */
+  public function emptyFieldDb($entity_id, $field_name, $entity_type = 'node') {
+    $entity_storage = $this->entityTypeManager->getStorage($entity_type);
+    $field_storage_definitions = $this->entityFieldManager->getFieldStorageDefinitions($entity_type);
+    $definition = $field_storage_definitions[$field_name];
+    $is_base = $definition->isBaseField();
+    $table_mapping = $entity_storage->getTableMapping($field_storage_definitions);
+    $table = $table_mapping->getFieldTableName($field_name);
+    $table_columns = $table_mapping->getAllColumns($table);
+    $entity_id = (array) $entity_id;
+
+    // Do not delete base field values.
+    if ($is_base) {
+      throw new \Exception('Will not delete the values of the base fields directly.');
+    }
+
+    // Do not delete from incompatible fields.
+    if (!in_array('entity_id', $table_columns)) {
+      throw new \Exception('The specified field type can not be emptied directly.');
+    }
+
+    return $this->database->delete($table)
+      ->condition('entity_id', $entity_id, 'IN')
+      ->execute();
+  }
 
 }

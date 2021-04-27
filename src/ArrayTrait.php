@@ -39,6 +39,44 @@ trait ArrayTrait {
         return $temp_data;
       }
     }
+
+    return FALSE;
+  }
+
+  /**
+   * Generates a diff between two arrays.
+   *
+   * @param array $array1
+   *   First array.
+   * @param array $array2
+   *   Second array.
+   *
+   * @return array
+   *   The diff.
+   */
+  public function arrayDiff(array $array1, array $array2) {
+    $result = [];
+
+    foreach ($array1 as $key => $val) {
+      if (is_array($val) && isset($array2[$key])) {
+        $tmp = $this->arrayDiff($val, $array2[$key]);
+        if ($tmp) {
+          $result[$key] = $tmp;
+        }
+      }
+      elseif (!isset($array2[$key])) {
+        $result[$key] = NULL;
+      }
+      elseif ($val !== $array2[$key]) {
+        $result[$key] = $array2[$key];
+      }
+      if (isset($array2[$key])) {
+        unset($array2[$key]);
+      }
+    }
+    $result = array_merge($result, $array2);
+
+    return $result;
   }
 
 }
