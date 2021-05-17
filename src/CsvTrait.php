@@ -41,11 +41,10 @@ trait CsvTrait {
           }
         }
         else {
-          $header = array_keys($fragment);
+          $header = $fragment;
           $new_key = TRUE;
           $key_id = 'csv_uuid';
           array_unshift($header, $key_id);
-          rewind($handle);
         }
       }
 
