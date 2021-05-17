@@ -78,5 +78,45 @@ trait ArrayTrait {
 
     return $result;
   }
+  
+    /**
+   * Apply python-line array slicing syntax.
+   *
+   * @param array $data
+   *   Source array.
+   * @param string $format
+   *   Formatting string, like [1:4].
+   *
+   * @return array
+   *   Resulting array.
+   */
+  public function arraySlice(array $data, $format = '') {
+    if (empty($format)) {
+      return $data;
+    }
+    $max = count($data) - 1;
+    $parts = explode(':', str_replace(['[', ']'], '', $format));
+    if (empty($parts[0])) {
+      $parts[0] = array_key_first($data);
+    }
+    if (empty($parts[1])) {
+      $parts[1] = array_key_last($data);
+    }
+    $start = intval($parts[0]);
+    $end = intval($parts[1]);
+    if ($start < 0) {
+      $start = $max - $start;
+    }
+    if ($end < 0) {
+      $end = $max - $end;
+    }
+    $length = ($end - $start) + 1;
+    if ($start < 0 || $end < 0 || $length <= 0) {
+      return [];
+    }
+
+    return array_slice($data, $start, $length, TRUE);
+  }
+
 
 }
