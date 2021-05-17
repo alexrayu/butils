@@ -110,7 +110,7 @@ trait ArrayTrait {
     if ($end < 0) {
       $end = $max - $end;
     }
-    $length = ($end - $start) + 1;
+    $length = $end - $start;
     if ($start < 0 || $end < 0 || $length <= 0) {
       return [];
     }
