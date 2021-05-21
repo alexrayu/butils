@@ -113,10 +113,10 @@ trait ArrayTrait {
       $start = intval($parts[0]);
       $end = intval($parts[1]);
       if ($start < 0) {
-        $start = $max - $start;
+        $start = $max + $start;
       }
       if ($end < 0) {
-        $end = $max - $end;
+        $end = $max + $end;
       }
       $length = $end - $start;
       if ($start < 0 || $end < 0 || $length <= 0) {
