@@ -59,9 +59,9 @@ trait DatetimeTrait {
     if (empty($string)) {
       return NULL;
     }
-
     try {
-      $date = new \DateTime($string, new \DateTimeZone($timezone));
+      $str_time = date(DateTimeItemInterface::DATETIME_STORAGE_FORMAT, $string);
+      $date = new \DateTime($str_time, new \DateTimeZone($timezone));
       $date->setTimezone(new \DateTimeZone('UTC'));
       return $date->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
     }
@@ -129,7 +129,7 @@ trait DatetimeTrait {
     }
 
     if (!$timezone_to) {
-      $timezone_to = drupal_get_user_timezone();
+      $timezone_to = date_default_timezone_get();
     }
 
     try {
