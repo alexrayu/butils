@@ -1,7 +1,5 @@
 name: Backend Utils
 type: module
-description: Backend utilities for Drupal 8
-core: 8.x
+description: Backend utilities for developers.
 core_version_requirement: ^8 || ^9
 package: Custom
-version: 8.x-1.6
