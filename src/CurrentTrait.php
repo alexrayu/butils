@@ -15,19 +15,50 @@ trait CurrentTrait {
   /**
    * Get the current page entity.
    *
+   * Node and user will be preferred if multiple entities are encountered.
+   *
+   * @param string $type
+   *   Expected entity type. NULL will result if not met.
+   *
    * @return \Drupal\Core\Entity\EntityInterface|null
    *   Current page entity.
    */
-  public function currentEntity() {
-    $page_entity = &drupal_static('butils_page_entity');
+  public function currentEntity($type = '') {
+    $page_entity = &drupal_static('butils_page_entity', NULL);
     if (!empty($page_entity)) {
       return $page_entity;
     }
+    $current_entities = $this->currentEntities();
+    if (!empty($current_entities)) {
+      if (!empty($type)) {
+        $page_entity = $current_entities[$type] ?? NULL;
+      }
+      else {
+        $page_entity = reset($current_entities);
+      }
+    }
+
+    return $page_entity;
+  }
+
+  /**
+   * Get all current page entities.
+   *
+   * @return array
+   *   Current page entities.
+   */
+  public function currentEntities() {
+    $page_entities = &drupal_static('butils_page_entities');
+    if (!empty($page_entities)) {
+      return $page_entities;
+    }
     $types = array_keys($this->entityTypeManager->getDefinitions());
-    $types = array_merge($types, [
+    $types = array_merge([
+      'node',
+      'user',
       'node_preview',
-    ]);
-    $page_entity = NULL;
+    ], $types);
+    $page_entities = [];
     $params = $this->routeMatch->getParameters()->all();
     foreach ($types as $type) {
       if (!empty($params[$type])) {
@@ -39,12 +70,12 @@ trait CurrentTrait {
         }
 
         if ($page_entity instanceof EntityInterface) {
-          return $page_entity;
+          $page_entities[$type] = $page_entity;
         }
       }
     }
 
-    return NULL;
+    return $page_entities;
   }
 
   /**
