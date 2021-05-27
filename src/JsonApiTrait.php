@@ -27,13 +27,15 @@ trait JsonApiTrait {
     foreach ($params as $name => $param) {
       $query_items[] = "filter[$name]=$param";
     }
-    if (strpos($url, '?') === FALSE) {
-      $url .= '?';
+    if (!empty($query_items)) {
+      if (strpos($url, '?') === FALSE) {
+        $url .= '?';
+      }
+      else {
+        $url .= '&';
+      }
+      $url .= implode('&', $query_items);
     }
-    else {
-      $url .= '&';
-    }
-    $url .= implode('&', $query_items);
     $res = $this->httpGet($url, $timeout);
     if ($res['code'] == 200) {
       $data = @json_decode($res['text'], TRUE);
