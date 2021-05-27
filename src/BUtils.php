@@ -31,6 +31,7 @@ class BUtils {
   use FileTrait;
   use HtmlTrait;
   use ImageStyleTrait;
+  use JsonApiTrait;
   use MediaTrait;
   use ParagraphsTrait;
   use SqlQueryTrait;
