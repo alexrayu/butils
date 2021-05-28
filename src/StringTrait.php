@@ -29,5 +29,36 @@ trait StringTrait {
 
     return $string;
   }
+  
+    /**
+   * Brutally check if substrings between heystacks and needle sintersect.
+   *
+   * Comparison is case-insensitive..
+   * Don't use this fn unless either needle or haystack is an array.
+   *
+   * @param string|array $needle
+   *   Needle(s)
+   * @param string|array $haystack
+   *   Heystack(s)
+   *
+   * @return bool
+   *   Whether in string.
+   */
+  public function inStr($needle, $haystack) {
+    if (empty($needle) || empty($haystack)) {
+      return FALSE;
+    }
+    $needles = (array) $needle;
+    $haystacks = (array) $haystack;
+    foreach ($needles as $needle) {
+      foreach ($haystacks as $haystack) {
+        if (strpos((string) strtolower($haystack), (string) strtolower($needle)) !== FALSE) {
+          return TRUE;
+        }
+      }
+    }
+
+    return FALSE;
+  }
 
 }
