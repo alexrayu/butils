@@ -110,6 +110,62 @@ trait HtmlTrait {
   }
 
   /**
+   * Strip the listed tags from the html sltring.
+   *
+   * @param string $html
+   *   Imput html string.
+   * @param array|string $tags
+   *   Tag or tags. Ex.: 'a, p, div' or ['a', 'p', 'div'].
+   *
+   * @return string
+   *   Processed string.
+   */
+  public function stripTags($html, $tags) {
+    if (empty($html)) {
+      return NULL;
+    }
+    if (empty($tags)) {
+      return $html;
+    }
+    if (is_string($tags)) {
+      $tags = explode(',', $tags);
+    }
+    $tags = (array) $tags;
+    foreach ($tags as $tag) {
+      $tag = trim($tag);
+      $html = preg_replace('/<' . $tag . '.*?>(.*)<\/' . $tag . '>/i', '$1', $html);
+    }
+
+    return $html;
+  }
+
+  /**
+   * Replace a tag in the html sltring.
+   *
+   * All the tag attributes will be lost.
+   *
+   * @param string $html
+   *   Imput html string.
+   * @param string $tag
+   *   Tag to be replaced. Ex.: 'a'.
+   * @param string $replacement_tag
+   *   Tag to serve as a replacement. Ex.: 'p'.
+   *
+   * @return string
+   *   Processed string.
+   */
+  public function replaceTag($html, $tag, $replacement_tag) {
+    if (empty($html)) {
+      return NULL;
+    }
+    if (empty($tag) || empty($replacement_tag)) {
+      return $html;
+    }
+
+    return preg_replace('/<' . $tag . '.*?>(.*)<\/' . $tag . '>/i', "<$replacement_tag>$1</$replacement_tag>", $html);
+  }
+
+  /**
    * Strip links and replace them with their text.
    *
    * @param string $html
@@ -119,7 +175,7 @@ trait HtmlTrait {
    *   String with stripped links.
    */
   public function stripLinks($html) {
-    return preg_replace('/<a.*?>(.*)<\/a>/i', '$1', $html);
+    return $this->stripTags($html, 'a');
   }
 
   /**
