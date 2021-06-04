@@ -132,9 +132,10 @@ trait HtmlTrait {
     }
     $tags = (array) $tags;
     foreach ($tags as $tag) {
-      $tag = trim($tag);
-      $html = preg_replace('/<' . $tag . '.*?>(.*)<\/' . $tag . '>/i', '$1', $html);
+      $html = preg_replace('/<' . $tag . '.*?>/is', '', $html);
+      $html = str_replace('</' . $tag . '>', '', $html);
     }
+    $html = $this->cleanHtml($html);
 
     return $html;
   }
@@ -161,8 +162,10 @@ trait HtmlTrait {
     if (empty($tag) || empty($replacement_tag)) {
       return $html;
     }
+    $html = preg_replace('/<' . $tag . '.*?>/is', "<$replacement_tag>", $html);
+    $html = str_replace('</' . $tag . '>', "</$replacement_tag>", $html);
 
-    return preg_replace('/<' . $tag . '.*?>(.*)<\/' . $tag . '>/i', "<$replacement_tag>$1</$replacement_tag>", $html);
+    return $html;
   }
 
   /**
