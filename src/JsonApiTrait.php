@@ -58,7 +58,7 @@ trait JsonApiTrait {
    * @return array
    *   Request result.
    */
-  public function httpGet($url, $timeout) {
+  public function httpGet($url, $timeout = 5) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
