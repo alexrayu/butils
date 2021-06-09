@@ -195,5 +195,41 @@ trait HtmlTrait {
     $html = strtolower($this->cleanHtml($html));
     return str_word_count($html);
   }
+  
+    /**
+   * Strip the empty listed tags from the html sltring.
+   *
+   * @param string $html
+   *   Imput html string.
+   * @param array|string $tags
+   *   Tag or tags. Ex.: 'a, p, div' or ['a', 'p', 'div'].
+   *
+   * @return string
+   *   Processed string.
+   */
+  public function stripEmptyTags($html, $tags) {
+    if (empty($html)) {
+      return NULL;
+    }
+    if (empty($tags)) {
+      return $html;
+    }
+    if (is_string($tags)) {
+      $tags = explode(',', $tags);
+    }
+    $tags = (array) $tags;
+    $rounds = 0;
+    do {
+      $total = 0;
+      foreach ($tags as $tag) {
+        $tag = trim($tag);
+        $html = preg_replace('/<' . $tag . '(.*)>(\s*|\W*|\&nbsp;*)*<\/' . $tag . '>/', '', $html, -1, $cases);
+        $total += $cases;
+      }
+      $rounds++;
+    } while ($total > 0);
+
+    return $html;
+  }
 
 }
