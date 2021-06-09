@@ -196,7 +196,7 @@ trait HtmlTrait {
     return str_word_count($html);
   }
   
-    /**
+  /**
    * Strip the empty listed tags from the html sltring.
    *
    * @param string $html
@@ -223,7 +223,7 @@ trait HtmlTrait {
       $total = 0;
       foreach ($tags as $tag) {
         $tag = trim($tag);
-        $html = preg_replace('/<' . $tag . '(.*)>(\s*|\W*|\&nbsp;*)*<\/' . $tag . '>/', '', $html, -1, $cases);
+        $html = preg_replace('/<' . $tag . '(\w*)(?:\s+\w+="[^"]+(?:"\$[^"]+"[^"]+)?")*>(\s|&nbsp;|\n|\r|\0|<\/\s?br\s?\/>)*<\/' . $tag . '>/', '', $html, -1, $cases);
         $total += $cases;
       }
       $rounds++;
