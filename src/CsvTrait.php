@@ -18,11 +18,13 @@ trait CsvTrait {
    *   The path to the file.
    * @param string $key_id
    *   The name of the unique identifier in the csv file.
+   * @param string $delimiter
+   *   The delimiter for the CSV items.
    *
    * @return array
    *   Loaded csv.
    */
-  public function loadCsv($path, $key_id = ''):array {
+  public function loadCsv($path, $key_id = '', $delimiter = ','):array {
     $data = [];
     $header = [];
     $new_key = FALSE;
@@ -30,7 +32,7 @@ trait CsvTrait {
     if ($handle = fopen($path, 'r')) {
 
       // Get or calculate the header.
-      if (($fragment = fgetcsv($handle)) !== FALSE) {
+      if (($fragment = fgetcsv($handle, 0, $delimiter)) !== FALSE) {
         $header = $fragment;
         if (!empty($key_id)) {
           if (array_search($key_id, $header) === FALSE) {
@@ -48,7 +50,7 @@ trait CsvTrait {
         }
       }
 
-      while (($fragment = fgetcsv($handle)) !== FALSE) {
+      while (($fragment = fgetcsv($handle, 0, $delimiter)) !== FALSE) {
         if ($new_key) {
           array_unshift($fragment, $pos_id);
           $joined = array_combine($header, $fragment);
