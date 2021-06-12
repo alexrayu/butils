@@ -36,6 +36,7 @@ trait CsvTrait {
         $header = $fragment;
         if (!empty($key_id)) {
           if (array_search($key_id, $header) === FALSE) {
+            $header = array_keys($header);
             $new_key = TRUE;
             $key_id = 'csv_uuid';
             array_unshift($header, $key_id);
