@@ -34,6 +34,7 @@ class BUtils {
   use JsonApiTrait;
   use MediaTrait;
   use ParagraphsTrait;
+  use RedirectsTrait;
   use SqlQueryTrait;
   use StateTrait;
   use StringTrait;
