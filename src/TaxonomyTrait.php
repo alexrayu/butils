@@ -169,7 +169,7 @@ trait TaxonomyTrait {
 
     return $items;
   }
-  
+
   /**
    * Get children of a taxonomy term.
    *
