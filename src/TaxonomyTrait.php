@@ -169,5 +169,24 @@ trait TaxonomyTrait {
 
     return $items;
   }
+  
+  /**
+   * Get children of a taxonomy term.
+   *
+   * @param string|int $tid
+   *   Term is.
+   * @param int $depth
+   *   Deph of tree. 0 - whole depth.
+   * @param bool $load_entities
+   *   Whether to also load the terms entities.
+   *
+   * @return array|null
+   *   Operation result.
+   */
+  public function getTermChildren($tid, $depth = 0, $load_entities = FALSE) {
+    $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
+    $vid = $term->getVocabularyId();
+    return $this->entityTypeManager->getStorage('taxonomy_term')->loadTree($vid, $tid, $depth, $load_entities);
+  }
 
 }
