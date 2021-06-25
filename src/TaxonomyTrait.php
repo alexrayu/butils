@@ -173,20 +173,24 @@ trait TaxonomyTrait {
   /**
    * Get children of a taxonomy term.
    *
-   * @param string|int $tid
+   * @param string|int|\Drupal\taxonomy\TermInterface $term
    *   Term is.
    * @param int $depth
-   *   Deph of tree. 0 - whole depth.
+   *   Deph of tree. NULL - whole depth.
    * @param bool $load_entities
    *   Whether to also load the terms entities.
    *
    * @return array|null
    *   Operation result.
    */
-  public function getTermChildren($tid, $depth = 0, $load_entities = FALSE) {
-    $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($tid);
-    $vid = $term->getVocabularyId();
-    return $this->entityTypeManager->getStorage('taxonomy_term')->loadTree($vid, $tid, $depth, $load_entities);
+  public function getTermChildren($term, $depth = NULL, $load_entities = FALSE) {
+    if (is_string($term) || is_numeric($term)) {
+      $term = $this->entityTypeManager->getStorage('taxonomy_term')->load($term);
+    }
+    if (empty($term)) {
+      return [];
+    }
+    return $this->entityTypeManager->getStorage('taxonomy_term')->loadTree($term->bundle(), $term->id(), $depth, $load_entities);
   }
 
 }
