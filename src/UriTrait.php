@@ -36,6 +36,9 @@ trait UriTrait {
           }
         }
       }
+      elseif ($uri_parts['scheme'] === 'internal') {
+        $string = $uri_parts['path'];
+      }
       else {
         $string = $uri;
       }
