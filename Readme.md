@@ -118,7 +118,7 @@ Contains helper functions to work with Drupal image styles.
 ### Media Trait
 Contains helper functions to work with Drupal core media.
 
-- **mediaByFid()** - Find the media entity by it's file id.
+- **mediaByFid()** - Find the media entity by its file id.
 
 ### Paragraphs Trait
 Drupal Paragraphs related helper functions and utilities.
@@ -167,7 +167,7 @@ Drupal Uri handling helper functions.
 Drupal User entity helper functions.
 
 - **userAccessRoles()** - Checks an account access against an array of roles.
-Use case - "allow access for administrator and editor roles".
+Use case - "allow access for the administrator and editor roles".
 
 ### Xml Trait
 Functions to facilitate working with Xml.
@@ -177,4 +177,4 @@ Functions to facilitate working with Xml.
 - **mapXmlValues()** - Gets XML values by map like ```key.subkey```, respecting
 the specific XML single/multiple value handling difference.
 
-- **cleanXml()** - Removes Win-specific charcters from Xml.
+- **cleanXml()** - Removes Win-specific characters from Xml.

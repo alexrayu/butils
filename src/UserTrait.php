@@ -56,4 +56,33 @@ trait UserTrait {
     return $this->userAccessRoles($account, ['administrator']);
   }
 
+  /**
+   * Gets user profile of a type by user id.
+   *
+   * @param int $uid
+   *   User uid.
+   * @param string $type
+   *   Profile type.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   *   Profile if any.
+   */
+  public function getProfile($uid, $type) {
+    if (!$this->moduleHandler->moduleExists('profile')) {
+      return NULL;
+    }
+    $list = \Drupal::entityTypeManager()
+      ->getStorage('profile')
+      ->loadByProperties([
+        'uid' => $uid,
+        'type' => $type,
+      ]);
+    $profile = NULL;
+    if (!empty($list)) {
+      $profile = reset($list);
+    }
+
+    return $profile;
+  }
+
 }

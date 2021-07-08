@@ -14,3 +14,4 @@ services:
       - '@request_stack'
       - '@current_user'
       - '@path.matcher'
+      - '@module_handler'
