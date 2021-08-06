@@ -332,4 +332,176 @@ trait EntityTrait {
     return (!empty($query->condition($key, $id)->execute()));
   }
 
+  /**
+   * Map string value to entity field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Destination entity.
+   * @param string $field_name
+   *   Name of the field.
+   * @param string $value
+   *   Value to map.
+   * @param string $input_format
+   *   Input format if any. Used for textareas.
+   *
+   * @return bool
+   *   Operation result.
+   */
+  public function mapString(EntityInterface $entity, $field_name, $value, $input_format = NULL) {
+    if (!$entity->hasField($field_name)) {
+      return FALSE;
+    }
+    if (!empty($value)) {
+      if ($input_format) {
+        $entity->set($field_name, [
+          'value' => $value,
+          'format' => $input_format,
+        ]);
+      }
+      else {
+        $entity->set($field_name, $value);
+      }
+    }
+    else {
+      $this->emptyField($entity, $field_name, FALSE);
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Map some value to entity field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Destination entity.
+   * @param string $field_name
+   *   Name of the field.
+   * @param string|array $value
+   *   Value to map.
+   *
+   * @return bool
+   *   Operation result.
+   */
+  public function mapValue(EntityInterface $entity, $field_name, $value) {
+    if (!$entity->hasField($field_name)) {
+      return FALSE;
+    }
+    if (!empty($value)) {
+      $entity->set($field_name, $value);
+    }
+    else {
+      $this->emptyField($entity, $field_name, FALSE);
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Map boolean value to an entity.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Node object.
+   * @param string $field_name
+   *   Name of the field.
+   * @param string $value
+   *   Value to map.
+   *
+   * @return bool
+   *   Operation result.
+   */
+  public function mapBool(EntityInterface $entity, $field_name, $value) {
+    if (!$entity->hasField($field_name)) {
+      return FALSE;
+    }
+    $value = (bool) $this->cleanString($value);
+    if ($value) {
+      $entity->set($field_name, $value);
+    }
+    else {
+      $this->emptyField($entity, $field_name, FALSE);
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Map term value to an entity field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Node object.
+   * @param string $field_name
+   *   Name of the field.
+   * @param string $vid
+   *   Vocabulary id.
+   * @param string|array $value
+   *   Value to map.
+   *
+   * @return bool
+   *   Operation result.
+   */
+  public function mapTerm(EntityInterface $entity, $field_name, $vid, $value) {
+    if (!$entity->hasField($field_name)) {
+      return FALSE;
+    }
+    $value = (array) $value;
+    $tids = [];
+
+    if (!empty($value)) {
+      foreach ($value as $sub_value) {
+        if (is_array($sub_value)) {
+          $tids[] = $this->toHierarchicalTerms($sub_value, $vid);
+        }
+        else {
+          $tids[] = $this->toTerm($sub_value, $vid);
+        }
+      }
+      if (!empty($tids)) {
+        $field_value = [];
+        foreach ($tids as $tid) {
+          if (!empty($tid)) {
+            $field_value[] = [
+              'target_id' => $tid,
+            ];
+          }
+        }
+        if (!empty($field_value)) {
+          $entity->set($field_name, $field_value);
+        }
+      }
+    }
+    else {
+      $this->emptyField($entity, $field_name, FALSE);
+    }
+
+    return TRUE;
+  }
+
+  /**
+   * Map number value to an entity field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Node object.
+   * @param string $field_name
+   *   Name of the field.
+   * @param string $value
+   *   Value to map.
+   *
+   * @return bool
+   *   Operation result.
+   */
+  public function mapNum(EntityInterface $entity, $field_name, $value) {
+    if (!$entity->hasField($field_name)) {
+      return FALSE;
+    }
+    $value = (float) $this->cleanString($value);
+    if ($value) {
+      $entity->set($field_name, $value);
+    }
+    else {
+      $this->emptyField($entity, $field_name, FALSE);
+    }
+
+    return TRUE;
+  }
+
 }
