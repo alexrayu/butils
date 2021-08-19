@@ -26,6 +26,7 @@ class BUtils {
   use CsvTrait;
   use CurrentTrait;
   use DatetimeTrait;
+  use DebugTrait;
   use DomDocumentTrait;
   use EntityTrait;
   use FieldTrait;
