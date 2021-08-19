@@ -15,3 +15,9 @@ services:
       - '@current_user'
       - '@path.matcher'
       - '@module_handler'
+  butils_debug_log:
+    class: Drupal\butils\EventSubscriber\DebugLog
+    arguments:
+      - '@logger.factory'
+    tags:
+      - { name: event_subscriber }
