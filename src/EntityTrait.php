@@ -282,6 +282,7 @@ trait EntityTrait {
    *   Entity id.
    *
    * @return \Drupal\Core\Entity\EntityInterface|null
+   *   The loaded entity.
    */
   public function entityLoad($type, $id) {
     return $this->entityTypeManager->getStorage($type)->load($id);
@@ -294,6 +295,7 @@ trait EntityTrait {
    *   Entity type.
    *
    * @return \Drupal\Core\Entity\Query\QueryInterface|null
+   *   The entity query.
    */
   public function entityQuery($type) {
     return $this->entityTypeManager->getStorage($type)->getQuery();
