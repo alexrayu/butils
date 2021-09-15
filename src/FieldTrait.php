@@ -51,6 +51,9 @@ trait FieldTrait {
   protected function getFieldDefinitionsDetails(array $extended_definition) {
     $definition = $extended_definition['definition'];
     $form_display = $this->entityTypeManager->getStorage('entity_form_display')->load($extended_definition['entity_type'] . '.' . $extended_definition['bundle'] . '.default');
+    if (empty($form_display)) {
+      return [];
+    }
     $component = $form_display->getComponent($extended_definition['field_name']);
     $field_type = $definition->getType();
 
@@ -251,7 +254,7 @@ trait FieldTrait {
 
     return $query->execute()->fetchField();
   }
-  
+
   /**
    * A hack to empty a field value without a Node::save().
    *
