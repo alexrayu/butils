@@ -31,9 +31,9 @@ trait StringTrait {
   }
   
     /**
-   * Brutally check if substrings between heystacks and needle sintersect.
+   * Brutally check if substrings between heystacks and needles intersect.
    *
-   * Comparison is case-insensitive..
+   * Comparison is case-insensitive.
    * Don't use this fn unless either needle or haystack is an array.
    *
    * @param string|array $needle
