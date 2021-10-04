@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Menu\MenuLinkTreeInterface;
 
 /**
  * Class BUtils.
@@ -35,6 +36,7 @@ class BUtils {
   use ImageStyleTrait;
   use JsonApiTrait;
   use MediaTrait;
+  use MenuTrait;
   use ParagraphsTrait;
   use RedirectsTrait;
   use SqlQueryTrait;
@@ -137,6 +139,13 @@ class BUtils {
   protected $moduleHandler;
 
   /**
+   * Menu link tree service.
+   *
+   * @var \Drupal\Core\Menu\MenuLinkTreeInterface
+   */
+  protected $menuTree;
+
+  /**
    * Constructs a new BUtils object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -165,6 +174,8 @@ class BUtils {
    *   Path matcher.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
+   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree
+   *   Menu link treee service.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -179,7 +190,8 @@ class BUtils {
     RequestStack $request_stack,
     AccountProxyInterface $account_proxy,
     PathMatcherInterface $path_matcher,
-    ModuleHandlerInterface $module_handler) {
+    ModuleHandlerInterface $module_handler,
+    MenuLinkTreeInterface $menu_link_tree) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
     $this->entityDisplayRepository = $entity_display_repository;
@@ -193,6 +205,7 @@ class BUtils {
     $this->currentUser = $account_proxy;
     $this->pathMatcher = $path_matcher;
     $this->moduleHandler = $module_handler;
+    $this->menuTree = $menu_link_tree;
   }
 
 }
