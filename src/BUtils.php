@@ -45,6 +45,7 @@ class BUtils {
   use TaxonomyTrait;
   use UriTrait;
   use UserTrait;
+  use ViewsTrait;
   use XmlTrait;
 
   /**
