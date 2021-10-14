@@ -121,11 +121,11 @@ trait CurrentTrait {
   /**
    * Get the current path.
    *
-   * @return \Drupal\Core\Path\PathMatcherInterface
-   *   Current path.
+   * @return string
+   *   Current request path like /content/mytitle.
    */
   public function currentPath() {
-    return $this->pathMatcher;
+    return $this->requestStack->getCurrentRequest()->getRequestUri();
   }
 
   /**
