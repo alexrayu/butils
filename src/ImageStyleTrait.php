@@ -12,6 +12,33 @@ use Drupal\Core\Entity\EntityInterface;
 trait ImageStyleTrait {
 
   /**
+   * Get image style URL or URI.
+   *
+   * @param string $image_uri
+   *   Image URI.
+   * @param string $id
+   *   Image style id.
+   * @param string $type
+   *   Response type, url or uri.
+   *
+   * @return string
+   *   Image style URL or URI.
+   */
+  public function imageStyleUrl($image_uri, $id, $type = 'url') {
+    $style = $this->entityTypeManager->getStorage('image_style')->load($id);
+    if (!empty($style)) {
+      if ($type === 'url') {
+        return $style->buildUrl($image_uri);
+      }
+      else {
+        return $style->buildUri($image_uri);
+      }
+    }
+
+    return NULL;
+  }
+
+  /**
    * Flush all derivatives of an image style.
    *
    * @param string $id
