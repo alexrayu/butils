@@ -27,7 +27,10 @@ trait UriTrait {
       return '';
     }
     if (!empty($uri_parts['scheme'])) {
-      if ($uri_parts['scheme'] === 'entity') {
+      if ($uri_parts['scheme'] === 'internal') {
+        return str_replace('internal:', '', $uri);
+      }
+      elseif ($uri_parts['scheme'] === 'entity') {
         $parts = explode('/', $uri_parts['path']);
         if ($parts[0] === 'node' && !empty($parts[1])) {
           $node = Node::load($parts[1]);
