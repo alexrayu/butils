@@ -250,9 +250,9 @@ trait EntityTrait {
    *   Build array.
    */
   public function entityBuild(EntityInterface $entity, $view_mode = 'default') {
-    return $this->entityTypeManager
-      ->getViewBuilder($entity->getEntityTypeId())
-      ->view($entity, $view_mode);
+    $view_builder = $this->entityTypeManager->getViewBuilder($entity->getEntityTypeId());
+    $viewed = $view_builder->view($entity, $view_mode);
+    return $view_builder->build($viewed);
   }
 
   /**
