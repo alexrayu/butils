@@ -32,7 +32,7 @@ trait MediaTrait {
    * @param \Drupal\media\MediaInterface|string $media
    *   Media object.
    *
-   * @return \Drupal\file\FileInterface|null
+   * @return \Drupal\Core\Entity\EntityInterface|null
    *   File if any.
    */
   public function mediaFile($media) {
@@ -45,6 +45,24 @@ trait MediaTrait {
     return $this->entityTypeManager->getStorage('file')->load(
       $media->getSource()->getSourceFieldValue($media)
     );
+  }
+
+  /**
+   * Get the media's metadata.
+   *
+   * (Is there an easier way?)
+   *
+   * @param \Drupal\media\MediaInterface|string $media
+   *   Media object.
+   */
+  public function mediaMetadata($media) {
+    $source = $media->getSource();
+    $keys = array_keys($source->getMetadataAttributes());
+    $metadata = [];
+    foreach ($keys as $key) {
+      $metadata[$key] = $source->getMetadata($media, $key);;
+    }
+    return $metadata;
   }
 
 }
