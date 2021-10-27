@@ -22,3 +22,8 @@ services:
       - '@logger.factory'
     tags:
       - { name: event_subscriber }
+  butils.twig_extension:
+    arguments: [ '@butils' ]
+    class: Drupal\butils\TwigExtension\ButilsTwigExtension
+    tags:
+      - { name: twig.extension }
