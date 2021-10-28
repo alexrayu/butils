@@ -27,6 +27,7 @@ class ButilsTwigExtension extends AbstractExtension {
   public function getFilters() {
     return [
       new TwigFilter('empty', [self::class, 'checkEmpty']),
+      new TwigFilter('uriToString', [self::class, 'uriToString']),
     ];
   }
 
@@ -54,7 +55,7 @@ class ButilsTwigExtension extends AbstractExtension {
   }
 
   /**
-   * Returns entity's build array. Wraps Butils::entityBuild.
+   * Returns entity's build array. Wraps Butils::entityBuild().
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   Entity to build.
@@ -62,10 +63,23 @@ class ButilsTwigExtension extends AbstractExtension {
    *   Entity view mode.
    *
    * @return array
-   *   Entity build array..
+   *   Entity build array.
    */
   public static function entityBuild(EntityInterface $entity, $view_mode = 'default') {
     return \Drupal::service('butils')->entityBuild($entity, $view_mode);
+  }
+
+  /**
+   * Converts uri to url string. Wraps Butils::uriToString().
+   *
+   * @param string $uri
+   *   Uri to convert to url string.
+   *
+   * @return array
+   *   Entity build array.
+   */
+  public static function uriToString($uri) {
+    return \Drupal::service('butils')->uriToString($uri);
   }
 
 }
