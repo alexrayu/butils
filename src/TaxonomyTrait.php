@@ -156,8 +156,7 @@ trait TaxonomyTrait {
    *   Result.
    */
   public function getTermsList($vocabulary, $show_hierarchy = FALSE) {
-    $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $tree = $termStorage->loadTree($vocabulary);
+    $tree = $this->termsTree($vocabulary);
     $items = [];
     foreach ($tree as $term) {
       $name = $term->name;
@@ -191,6 +190,26 @@ trait TaxonomyTrait {
       return [];
     }
     return $this->entityTypeManager->getStorage('taxonomy_term')->loadTree($term->bundle(), $term->id(), $depth, $load_entities);
+  }
+
+  /**
+   * A wrapper around loadTree().
+   *
+   * @param string $vid
+   *   Vocabulary id.
+   * @param int $parent
+   *   Parent id (if there is a need to get tree under a term).
+   * @param null|int $max_depth
+   *   Depth of the tree.
+   * @param bool $load_entities
+   *   Whether to load the term entities.
+   *
+   * @return array
+   *   Loaded terms tree.
+   */
+  public function termsTree($vid, $parent = 0, $max_depth = NULL, $load_entities = FALSE) {
+    $termStorage = $this->entityTypeManager->getStorage('taxonomy_term');
+    return $termStorage->loadTree($vid, $parent, $max_depth, $load_entities);
   }
 
 }
