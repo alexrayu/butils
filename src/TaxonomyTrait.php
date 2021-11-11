@@ -212,4 +212,25 @@ trait TaxonomyTrait {
     return $termStorage->loadTree($vid, $parent, $max_depth, $load_entities);
   }
 
+  /**
+   * Loads taxonomy term by name.
+   *
+   * @param string $name
+   *   Term name.
+   * @param string $vid
+   *   Taxonomy id.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface[]
+   *   Terms is any.
+   */
+  public function termsByName($name, $vid = NULL) {
+    $properties = ['name' => $name];
+    if ($vid) {
+      $properties['vid'] = $vid;
+    }
+    return \Drupal::entityTypeManager()
+      ->getStorage('taxonomy_term')
+      ->loadByProperties($properties) ?: [];
+  }
+
 }
