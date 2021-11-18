@@ -31,21 +31,23 @@ trait MenuTrait {
     $tree = $this->menuTree->transform($tree, $manipulators);
     $menu_tmp = $this->menuTree->build($tree);
     $menu = [];
-    foreach ($menu_tmp['#items'] as $item) {
-      $childItems = [];
-      if (!empty($item['below'])) {
-        foreach ($item['below'] as $child) {
-          $childItems[] = [
-            'href' => $child['url']->toString(),
-            'label' => $child['title'],
-          ];
+    if (!empty($menu_tmp['#items'])) {
+      foreach ($menu_tmp['#items'] as $item) {
+        $childItems = [];
+        if (!empty($item['below'])) {
+          foreach ($item['below'] as $child) {
+            $childItems[] = [
+              'href' => $child['url']->toString(),
+              'label' => $child['title'],
+            ];
+          }
         }
+        $menu[] = [
+          'href' => $item['url']->toString(),
+          'label' => $item['title'],
+          'children' => !empty($item['below']) ? $childItems : '',
+        ];
       }
-      $menu[] = [
-        'href' => $item['url']->toString(),
-        'label' => $item['title'],
-        'children' => !empty($item['below']) ? $childItems : '',
-      ];
     }
 
     return $menu;
