@@ -23,7 +23,7 @@ trait MenuTrait {
   public function menuTreeLinks($menu_name) {
     $parameters = new MenuTreeParameters();
     $parameters->onlyEnabledLinks();
-    $tree = $this->menuTree->load('menu-search-faq', $parameters);
+    $tree = $this->menuTree->load($menu_name, $parameters);
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
