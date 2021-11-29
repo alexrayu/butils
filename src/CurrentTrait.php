@@ -148,4 +148,14 @@ trait CurrentTrait {
     return strpos($this->routeMatch->getRouteName(), 'layout_builder') === 0;
   }
 
+  /**
+   * Imitation of Drupal 7's aarg() function.
+   *
+   * @return array
+   *   Current path args.
+   */
+  public function arg() {
+    return explode('/', trim($this->currentPath(), '/'));
+  }
+
 }
