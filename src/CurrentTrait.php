@@ -149,13 +149,21 @@ trait CurrentTrait {
   }
 
   /**
-   * Imitation of Drupal 7's aarg() function.
+   * Imitation of Drupal 7's arg() function.
    *
-   * @return array
+   * @param string $pos
+   *   Position of the argument if any.
+   *
+   * @return array|string
    *   Current path args.
    */
-  public function arg() {
-    return explode('/', trim($this->currentPath(), '/'));
+  public function arg($pos = NULL) {
+    $arg = explode('/', trim($this->currentPath(), '/'));
+    if (is_numeric($pos)) {
+      return $arg[$pos] ?? NULL;
+    }
+
+    return $arg;
   }
 
 }
