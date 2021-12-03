@@ -278,14 +278,19 @@ trait EntityTrait {
    *
    * @param string $type
    *   Entity type.
-   * @param string $id
+   * @param string|array $id
    *   Entity id.
    *
-   * @return \Drupal\Core\Entity\EntityInterface|null
+   * @return \Drupal\Core\Entity\EntityInterface|array|null
    *   The loaded entity.
    */
   public function entityLoad($type, $id) {
-    return $this->entityTypeManager->getStorage($type)->load($id);
+    if (is_array($id)) {
+      return $this->entityTypeManager->getStorage($type)->loadMultiple($id);
+    }
+    else {
+      return $this->entityTypeManager->getStorage($type)->load($id);
+    }
   }
 
   /**
