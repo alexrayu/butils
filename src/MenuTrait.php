@@ -21,15 +21,7 @@ trait MenuTrait {
    *   Menu array.
    */
   public function menuTreeLinks($menu_name) {
-    $parameters = new MenuTreeParameters();
-    $parameters->onlyEnabledLinks();
-    $tree = $this->menuTree->load($menu_name, $parameters);
-    $manipulators = [
-      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
-      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
-    ];
-    $tree = $this->menuTree->transform($tree, $manipulators);
-    $menu_tmp = $this->menuTree->build($tree);
+    $menu_tmp = $this->menuBuild($menu_name);
     $menu = [];
     if (!empty($menu_tmp['#items'])) {
       foreach ($menu_tmp['#items'] as $item) {
@@ -51,6 +43,40 @@ trait MenuTrait {
     }
 
     return $menu;
+  }
+
+  /**
+   * Get menu tree of a menu by name.
+   *
+   * @param string $menu_name
+   *   Existing menu name.
+   *
+   * @return array
+   *   Array of menu link elements.
+   */
+  public function menuTree($menu_name) {
+    $parameters = new MenuTreeParameters();
+    $parameters->onlyEnabledLinks();
+    $tree = $this->menuTree->load($menu_name, $parameters);
+    $manipulators = [
+      ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+      ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+    ];
+
+    return $this->menuTree->transform($tree, $manipulators);
+  }
+
+  /**
+   * Build render array of a menu by name.
+   *
+   * @param string $menu_name
+   *   Existing menu name.
+   *
+   * @return array
+   *   Built menu tree.
+   */
+  public function menuBuild($menu_name) {
+    return $this->menuTree->build($this->menuTree($menu_name));
   }
 
 }
