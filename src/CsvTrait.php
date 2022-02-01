@@ -24,18 +24,24 @@ trait CsvTrait {
    * @return array
    *   Loaded csv.
    */
-  public function loadCsv($path, $key_id = '', $delimiter = ','):array {
+  public function loadCsv($path, $key_id = '', $delimiter = ''): array {
     $data = [];
     $header = [];
     $new_key = FALSE;
     $pos_id = 0;
-    if ($handle = fopen($path, 'r')) {
+
+    // Autodetect delimiter.
+    if (!$delimiter) {
+      $delimiter = $this->detectCsvDelimiter($path);
+    }
+
+    if ($handle = fopen($path, 'rb')) {
 
       // Get or calculate the header.
       if (($fragment = fgetcsv($handle, 0, $delimiter)) !== FALSE) {
         $header = $fragment;
         if (!empty($key_id)) {
-          if (array_search($key_id, $header) === FALSE) {
+          if (!in_array($key_id, $header, FALSE)) {
             $header = array_keys($header);
             $new_key = TRUE;
             $key_id = 'csv_uuid';
@@ -70,6 +76,32 @@ trait CsvTrait {
   }
 
   /**
+   * Identify the csv delimiter.
+   *
+   * @param string $path
+   *   Path to CSV file..
+   *
+   * @return string
+   *   Detected delimiter
+   */
+  public function detectCsvDelimiter($path) {
+    $delimiters = [
+      ';' => 0,
+      ',' => 0,
+      "\t" => 0,
+      "|" => 0,
+    ];
+    $handle = fopen($path, 'rb');
+    $header = fgets($handle);
+    fclose($handle);
+    foreach ($delimiters as $delimiter => &$count) {
+      $count = count(str_getcsv($header, $delimiter));
+    }
+
+    return array_search(max($delimiters), $delimiters);
+  }
+
+  /**
    * Write the csv file.
    *
    * @param string $path
@@ -82,13 +114,15 @@ trait CsvTrait {
    * @return bool
    *   Operation result.
    */
-  public function saveCsv($path, array $data, array $header = []):bool {
+  public function saveCsv($path, array $data, array $header = []): bool {
     if (!empty($header)) {
       array_unshift($data, $header);
     }
     $pathinfo = pathinfo($path);
-    $this->fileSystem->prepareDirectory($pathinfo['dirname'], FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
-    if ($handle = fopen($path, 'w')) {
+    $this->fileSystem->prepareDirectory($pathinfo['dirname'],
+      FileSystemInterface::CREATE_DIRECTORY
+      | FileSystemInterface::MODIFY_PERMISSIONS);
+    if ($handle = fopen($path, 'wb')) {
       foreach ($data as $line) {
         fputcsv($handle, $line);
       }
