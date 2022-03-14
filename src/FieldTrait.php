@@ -195,6 +195,7 @@ trait FieldTrait {
     switch ($field_build['#field_type']) {
       case 'file':
       case 'image':
+      case 'entity_reference':
         $result = (string) $this->renderer->renderRoot($field_build);
         break;
 
