@@ -297,4 +297,56 @@ trait FieldTrait {
       ->execute();
   }
 
+  /**
+   * Removes reference to an entity from the reference field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $parent
+   *   Parent entity.
+   * @param string $field_name
+   *   Reference entity field.
+   * @param string $target_id
+   *   Referenced entity id.
+   *
+   * @return int
+   *   Returns amount of remaining referenced items.
+   */
+  public function fieldRemoveRerence(EntityInterface $parent, $field_name, $target_id) {
+    $pids = array_column($parent->{$field_name}->getValue(), 'target_id', 'target_id');
+    unset($pids[$parent->id()]);
+    $parent->{$field_name} = $pids;
+    $parent->save();
+
+    return count($pids);
+  }
+
+  /**
+   * Removes reference to an entity from the reference revisions field.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $parent
+   *   Parent entity.
+   * @param string $field_name
+   *   Reference entity field.
+   * @param string $target_id
+   *   Referenced entity id.
+   *
+   * @return int
+   *   Returns amount of remaining referenced items.
+   */
+  public function fieldRemoveReferenceRevision(EntityInterface $parent, $field_name, $target_id) {
+    $values = $parent->{$field_name}->getValue();
+    $has_change = FALSE;
+    foreach ($values as $key => $value) {
+      if ((string) $value['target_id'] === (string) $target_id) {
+        unset($values[$key]);
+        $has_change = TRUE;
+      }
+    }
+    if ($has_change) {
+      $parent->{$field_name} = $values;
+      $parent->save();
+    }
+
+    return count($values);
+  }
+
 }
