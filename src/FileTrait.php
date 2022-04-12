@@ -81,4 +81,17 @@ trait FileTrait {
     return file_url_transform_relative(file_create_url($uri));
   }
 
+  /**
+   * Get file real path.
+   *
+   * @param string $uri
+   *   File Uri.
+   *
+   * @return false|string
+   *   Realpath if found.
+   */
+  public function fileRealPath($uri) {
+    return $this->fileSystem->realpath($uri);
+  }
+
 }
