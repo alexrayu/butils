@@ -7,7 +7,7 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityDisplayRepository;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\Database\Driver\mysql\Connection;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -87,7 +87,7 @@ class BUtils {
   /**
    * Database connection.
    *
-   * @var \Drupal\Core\Database\Driver\mysql\Connection
+   * @var \Drupal\Core\Database\Connection
    */
   protected $database;
 
@@ -160,7 +160,7 @@ class BUtils {
    *   State manager.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   Renderer.
-   * @param \Drupal\Core\Database\Driver\mysql\Connection $database
+   * @param \Drupal\Core\Database\Connection $database
    *   Database connection.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   FileSystem service.
