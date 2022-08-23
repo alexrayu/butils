@@ -78,7 +78,7 @@ trait FileTrait {
    *   Relative url.
    */
   public function uriToRelative($uri) {
-    return file_url_transform_relative(file_create_url($uri));
+    return \Drupal::service('file_url_generator')->generateString($uri);
   }
 
   /**
