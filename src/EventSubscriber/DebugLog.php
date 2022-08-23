@@ -2,10 +2,10 @@
 
 namespace Drupal\butils\EventSubscriber;
 
+use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
-use Symfony\Component\HttpKernel\Event\PostResponseEvent;
 
 /**
  * Class DebugLog: write the cumulative log on core shutdown.
@@ -32,10 +32,10 @@ class DebugLog implements EventSubscriberInterface {
   /**
    * Writes the debug log if any.
    *
-   * @param \Symfony\Component\HttpKernel\Event\PostResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\TerminateEvent $event
    *   The Event to process.
    */
-  public function onTerminate(PostResponseEvent $event) {
+  public function onTerminate(TerminateEvent $event) {
     $log =& drupal_static('butils_debug_log', []);
     if (!empty($log)) {
       $flat = '';

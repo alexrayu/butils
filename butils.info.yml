@@ -1,5 +1,5 @@
 name: Backend Utils
 type: module
 description: Backend utilities for developers.
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^9.4 || 10
 package: Custom

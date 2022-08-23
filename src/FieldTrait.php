@@ -79,10 +79,10 @@ trait FieldTrait {
     ];
     $details += $extended_definition;
     if (is_object($details['description'])) {
-      $details['description'] = render($details['description']);
+      $details['description'] = $this->renderer->render($details['description']);
     }
     if (is_object($details['label'])) {
-      $details['description'] = render($details['label']);
+      $details['description'] = $this->renderer->render($details['label']);
     }
 
     // Additions for entity reference.
