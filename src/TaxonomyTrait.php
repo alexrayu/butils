@@ -268,7 +268,7 @@ trait TaxonomyTrait {
 
     // Get younger siblings.
     $query = $this->database->select('taxonomy_term__parent', 'tp');
-    $query->join('taxonomy_term_field_data', 'tfd', "tfd.tid = tp.entity_id");
+    $query->join('taxonomy_term_field_data', 'tfd', 'tfd.tid = tp.entity_id');
     $query->fields('tfd', ['tid'])
       ->condition('tp.parent_target_id', $parent_tid)
       ->condition('tfd.weight', $weight, '<')
