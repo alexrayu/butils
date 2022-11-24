@@ -193,6 +193,23 @@ trait TaxonomyTrait {
   }
 
   /**
+   * Get taxonomy term parent.
+   *
+   * @param int $tid
+   *   Term id.
+   *
+   * @return int
+   *   Parent tid.
+   */
+  public function getTermParent($tid) {
+    return $this->database->select('taxonomy_term__parent', 'tp')
+      ->fields('tp', ['parent_target_id'])
+      ->condition('tp.entity_id', $tid)
+      ->condition('tp.parent_target_id', 0, '<>')
+      ->execute()->fetchField();
+  }
+
+  /**
    * A wrapper around loadTree().
    *
    * @param string $vid
@@ -231,6 +248,32 @@ trait TaxonomyTrait {
     return \Drupal::entityTypeManager()
       ->getStorage('taxonomy_term')
       ->loadByProperties($properties) ?: [];
+  }
+
+  /**
+   * Get taxonomy terms under parent and up to a certain tid (level limiter).
+   *
+   * @param int $tid
+   *   Term id.
+   *
+   * @return array
+   *   Term tids.
+   */
+  public function getTermYoungerSiblings($tid) {
+    $parent_tid = $this->getTermParent($tid);
+    $weight = $this->database->select('taxonomy_term_field_data', 'tfd')
+      ->fields('tfd', ['weight'])
+      ->condition('tfd.tid', $tid)
+      ->execute()->fetchField();
+
+    // Get younger siblings.
+    $query = $this->database->select('taxonomy_term__parent', 'tp');
+    $query->join('taxonomy_term_field_data', 'tfd', 'tfd.tid = tp.entity_id');
+    $query->fields('tfd', ['tid'])
+      ->condition('tp.parent_target_id', $parent_tid)
+      ->condition('tfd.weight', $weight, '<')
+      ->groupBy('tfd.tid');
+    return $query->execute()->fetchAllKeyed(0, 0);
   }
 
 }
