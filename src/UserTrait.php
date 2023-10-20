@@ -71,7 +71,7 @@ trait UserTrait {
     if (!$this->moduleHandler->moduleExists('profile')) {
       return NULL;
     }
-    $list = \Drupal::entityTypeManager()
+    $list = $this->entityTypeManager
       ->getStorage('profile')
       ->loadByProperties([
         'uid' => $uid,
