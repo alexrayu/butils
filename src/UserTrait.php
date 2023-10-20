@@ -106,6 +106,7 @@ trait UserTrait {
     // Username does not exists outside this account, use it.
     $uids = $this->entityTypeManager->getStorage('user')->getQuery()
       ->condition('name', $username)
+      ->accessCheck(FALSE)
       ->execute();
     if (empty($uids)) {
       return $username;
