@@ -23,6 +23,7 @@ trait MediaTrait {
   public function mediaByFid($field_name, $fid) {
     return $this->entityTypeManager->getStorage('media')->getQuery()
       ->condition($field_name, $fid)
+      ->accessCheck(FALSE)
       ->execute();
   }
 

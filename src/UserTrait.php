@@ -71,7 +71,7 @@ trait UserTrait {
     if (!$this->moduleHandler->moduleExists('profile')) {
       return NULL;
     }
-    $list = \Drupal::entityTypeManager()
+    $list = $this->entityTypeManager
       ->getStorage('profile')
       ->loadByProperties([
         'uid' => $uid,
@@ -106,6 +106,7 @@ trait UserTrait {
     // Username does not exists outside this account, use it.
     $uids = $this->entityTypeManager->getStorage('user')->getQuery()
       ->condition('name', $username)
+      ->accessCheck(FALSE)
       ->execute();
     if (empty($uids)) {
       return $username;
