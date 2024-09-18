@@ -71,7 +71,7 @@ trait UserTrait {
     if (!$this->moduleHandler->moduleExists('profile')) {
       return NULL;
     }
-    $list = \Drupal::entityTypeManager()
+    $list = $this->entityTypeManager
       ->getStorage('profile')
       ->loadByProperties([
         'uid' => $uid,
@@ -83,6 +83,48 @@ trait UserTrait {
     }
 
     return $profile;
+  }
+
+  /**
+   * Compose a username for a user.
+   *
+   * @param string $first_name
+   *   First name.
+   * @param string $last_name
+   *   Last name.
+   *
+   * @return string
+   *   Generated user name.
+   */
+  public function composeUsername($first_name, $last_name) {
+    $first_name = substr($first_name, 0, 10);
+    $first_name = preg_replace('/[^A-Za-z0-9 ]/', '', $first_name);
+    $last_name = substr($last_name, 0, 10);
+    $last_name = preg_replace('/[^A-Za-z0-9 ]/', '', $last_name);
+    $username = strtolower($first_name . '.' . $last_name);
+
+    // Username does not exists outside this account, use it.
+    $uids = $this->entityTypeManager->getStorage('user')->getQuery()
+      ->condition('name', $username)
+      ->accessCheck(FALSE)
+      ->execute();
+    if (empty($uids)) {
+      return $username;
+    }
+
+    // Validation failed, check the latest version of the username.
+    $counter = 1;
+    do {
+      $computed_username = $username . '.' . $counter++;
+    } while (
+      (bool) $this->database->select('users_field_data')
+        ->condition('name', $computed_username)
+        ->countQuery()
+        ->execute()
+        ->fetchField()
+    );
+
+    return $computed_username;
   }
 
 }

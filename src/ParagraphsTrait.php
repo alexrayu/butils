@@ -26,7 +26,7 @@ trait ParagraphsTrait {
         if (empty($paragraph)) {
           continue;
         }
-        $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($paragraph->getEntityTypeId(), $paragraph->bundle());
+        $field_definitions = $this->entityFieldManager->getFieldDefinitions($paragraph->getEntityTypeId(), $paragraph->bundle());
         foreach ($field_definitions as $field_definition) {
           if ($field_definition->getType() === 'entity_reference_revisions') {
             $values = $paragraph->get($field_definition->getName())->getValue();

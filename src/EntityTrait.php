@@ -28,7 +28,7 @@ trait EntityTrait {
     foreach ($values as $key => $value) {
       $query->condition($key, $value);
     }
-    $ids = $query->execute();
+    $ids = $query->accessCheck(FALSE)->execute();
     if (!empty($ids)) {
       $id = reset($ids);
       $entity = $this->entityTypeManager->getStorage($type)->load($id);
@@ -336,6 +336,7 @@ trait EntityTrait {
     }
     $query = $this->entityQuery($type);
     $key = $this->entityTypeManager->getDefinition($type)->getKey('id');
+    $query->accessCheck(FALSE);
     return (!empty($query->condition($key, $id)->execute()));
   }
 

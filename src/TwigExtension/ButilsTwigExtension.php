@@ -17,7 +17,7 @@ class ButilsTwigExtension extends AbstractExtension {
    */
   public function getFunctions(): array {
     return [
-      new TwigFunction('entityBuild', [self::class, 'entityBuild']),
+      new TwigFunction('entityBuild', self::class->entityBuild(...)),
     ];
   }
 
@@ -26,8 +26,8 @@ class ButilsTwigExtension extends AbstractExtension {
    */
   public function getFilters() {
     return [
-      new TwigFilter('empty', [self::class, 'checkEmpty']),
-      new TwigFilter('uriToString', [self::class, 'uriToString']),
+      new TwigFilter('empty', self::class->checkEmpty(...)),
+      new TwigFilter('uriToString', self::class->uriToString(...)),
     ];
   }
 

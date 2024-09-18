@@ -64,6 +64,7 @@ trait TaxonomyTrait {
       ->condition('vid', $vid)
       ->condition('name', $name)
       ->condition('langcode', $langcode)
+      ->accessCheck(FALSE)
       ->execute();
     if (!empty($res)) {
       $tid = reset($res);
@@ -111,6 +112,7 @@ trait TaxonomyTrait {
         ->condition('vid', $vid)
         ->condition('name', $word)
         ->condition('langcode', $langcode)
+        ->accessCheck(FALSE)
         ->execute();
       if (!empty($res)) {
         return reset($res);
