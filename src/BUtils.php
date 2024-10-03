@@ -16,6 +16,7 @@ use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 
 /**
  * Class BUtils.
@@ -148,6 +149,13 @@ class BUtils {
   protected $menuTree;
 
   /**
+   * File URL generator service.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected $fileUrlGenerator;
+
+  /**
    * Constructs a new BUtils object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -177,7 +185,9 @@ class BUtils {
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Module handler.
    * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menu_link_tree
-   *   Menu link treee service.
+   *   Menu link tree service.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
+   *   File url generator service.
    */
   public function __construct(
     EntityTypeManagerInterface $entity_type_manager,
@@ -193,7 +203,9 @@ class BUtils {
     AccountProxyInterface $account_proxy,
     PathMatcherInterface $path_matcher,
     ModuleHandlerInterface $module_handler,
-    MenuLinkTreeInterface $menu_link_tree) {
+    MenuLinkTreeInterface $menu_link_tree,
+    FileUrlGeneratorInterface $file_url_generator,
+  ) {
     $this->entityTypeManager = $entity_type_manager;
     $this->entityFieldManager = $entity_field_manager;
     $this->entityDisplayRepository = $entity_display_repository;
@@ -208,6 +220,7 @@ class BUtils {
     $this->pathMatcher = $path_matcher;
     $this->moduleHandler = $module_handler;
     $this->menuTree = $menu_link_tree;
+    $this->fileUrlGenerator = $file_url_generator;
   }
 
 }

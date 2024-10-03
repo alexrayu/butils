@@ -2,8 +2,6 @@
 
 namespace Drupal\butils;
 
-use Drupal\file\Entity\File;
-
 /**
  * Trait FileTrait.
  *
@@ -56,7 +54,7 @@ trait FileTrait {
   }
 
   /**
-   * Get relative URI for the file.
+   * Generates absolute URL for the file.
    *
    * @param \Drupal\file\Entity\File $file
    *   File object.
@@ -64,7 +62,26 @@ trait FileTrait {
    * @return string
    *   Relative url.
    */
-  public function fileRelativeUrl(File $file) {
+  public function fileAbsoluteUrl($file) {
+    if (!$file) {
+      return NULL;
+    }
+    return $this->uriToAbsolute($file->getFileUri());
+  }
+
+  /**
+   * Generates relative URL for the file.
+   *
+   * @param \Drupal\file\Entity\File|null $file
+   *   File object.
+   *
+   * @return string
+   *   Relative url.
+   */
+  public function fileRelativeUrl($file) {
+    if (!$file) {
+      return NULL;
+    }
     return $this->uriToRelative($file->getFileUri());
   }
 
@@ -78,7 +95,20 @@ trait FileTrait {
    *   Relative url.
    */
   public function uriToRelative($uri) {
-    return \Drupal::service('file_url_generator')->generateString($uri);
+    return $this->fileUrlGenerator->generateString($uri);
+  }
+
+  /**
+   * Convert uri to absolute url.
+   *
+   * @param string $uri
+   *   File uri.
+   *
+   * @return string
+   *   Absolute url.
+   */
+  public function uriToAbsolute($uri) {
+    return $this->fileUrlGenerator->generateAbsoluteString($uri);
   }
 
   /**
