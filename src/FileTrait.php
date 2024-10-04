@@ -56,7 +56,7 @@ trait FileTrait {
   /**
    * Generates absolute URL for the file.
    *
-   * @param \Drupal\file\Entity\File $file
+   * @param \Drupal\file\FileInterface $file
    *   File object.
    *
    * @return string
@@ -72,7 +72,7 @@ trait FileTrait {
   /**
    * Generates relative URL for the file.
    *
-   * @param \Drupal\file\Entity\File|null $file
+   * @param \Drupal\file\FileInterface|null $file
    *   File object.
    *
    * @return string
@@ -122,6 +122,28 @@ trait FileTrait {
    */
   public function fileRealPath($uri) {
     return $this->fileSystem->realpath($uri);
+  }
+
+  /**
+   * View the file image in an image style.
+   *
+   * @param \Drupal\file\FileInterface $file
+   *   File entity.
+   * @param string $image_style_name
+   *   Image style name.
+   *
+   * @return string
+   *   Url to the image styled image.
+   */
+  public function fileUrlImageStyle($file, $image_style_name = 'thumbnail') {
+    if (is_numeric($file)) {
+      $file = $this->entityTypeManager->getStorage('file')->load($file);
+    }
+    $image_style = $this->entityTypeManager->getStorage('image_style')->load($image_style_name);
+    if (empty($file) || empty($image_style)) {
+      return NULL;
+    }
+    return $image_style->buildUrl($file->getFileUri());
   }
 
 }
