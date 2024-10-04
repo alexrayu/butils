@@ -91,4 +91,23 @@ trait MediaTrait {
     return $url;
   }
 
+  /**
+   * View the media image in an image style.
+   *
+   * @param \Drupal\media\MediaInterface|null $media
+   *   Media entity.
+   * @param string $image_style_name
+   *   Image style name.
+   *
+   * @return string
+   *   Url to the image styled image.
+   */
+  public function mediaFileUrlImageStyle($media, $image_style_name = 'thumbnail') {
+    if (is_numeric($media)) {
+      $media = $this->entityTypeManager->getStorage('media')->load($media);
+    }
+    $file = $this->mediaFile($media);
+    return $this->fileUrlImageStyle($file, $image_style_name);
+  }
+
 }
