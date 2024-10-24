@@ -51,12 +51,13 @@ trait MediaTrait {
   /**
    * Get the media's metadata.
    *
-   * (Is there an easier way?)
-   *
-   * @param \Drupal\media\MediaInterface|string $media
+   * @param \Drupal\media\MediaInterface|null $media
    *   Media object.
    */
   public function mediaMetadata($media) {
+    if (!$media) {
+      return [];
+    }
     $source = $media->getSource();
     $keys = array_keys($source->getMetadataAttributes());
     $metadata = [];
@@ -64,6 +65,49 @@ trait MediaTrait {
       $metadata[$key] = $source->getMetadata($media, $key);;
     }
     return $metadata;
+  }
+
+  /**
+   * Generates an URL to the end file of the media.
+   *
+   * @param \Drupal\media\MediaInterface|null $media
+   *   Source media.
+   * @param bool $absolute
+   *   Whether the generated url needs to be absolute.
+   *
+   * @return string|null
+   *   URL string.
+   */
+  public function mediaFileUrl($media, $absolute = FALSE) {
+    if (!$media) {
+      return NULL;
+    }
+    $url = NULL;
+    $file = $this->mediaFile($media);
+    if (!empty($file)) {
+      $url = $absolute
+        ? $this->fileAbsoluteUrl($file) : $this->fileRelativeUrl($file);
+    }
+    return $url;
+  }
+
+  /**
+   * View the media image in an image style.
+   *
+   * @param \Drupal\media\MediaInterface|null $media
+   *   Media entity.
+   * @param string $image_style_name
+   *   Image style name.
+   *
+   * @return string
+   *   Url to the image styled image.
+   */
+  public function mediaFileUrlImageStyle($media, $image_style_name = 'thumbnail') {
+    if (is_numeric($media)) {
+      $media = $this->entityTypeManager->getStorage('media')->load($media);
+    }
+    $file = $this->mediaFile($media);
+    return $this->fileUrlImageStyle($file, $image_style_name);
   }
 
 }

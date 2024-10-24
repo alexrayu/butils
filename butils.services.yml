@@ -16,6 +16,7 @@ services:
       - '@path.matcher'
       - '@module_handler'
       - '@menu.link_tree'
+      - '@file_url_generator'
   butils_debug_log:
     class: Drupal\butils\EventSubscriber\DebugLog
     arguments:

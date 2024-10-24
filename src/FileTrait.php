@@ -2,8 +2,6 @@
 
 namespace Drupal\butils;
 
-use Drupal\file\Entity\File;
-
 /**
  * Trait FileTrait.
  *
@@ -56,15 +54,34 @@ trait FileTrait {
   }
 
   /**
-   * Get relative URI for the file.
+   * Generates absolute URL for the file.
    *
-   * @param \Drupal\file\Entity\File $file
+   * @param \Drupal\file\FileInterface $file
    *   File object.
    *
    * @return string
    *   Relative url.
    */
-  public function fileRelativeUrl(File $file) {
+  public function fileAbsoluteUrl($file) {
+    if (!$file) {
+      return NULL;
+    }
+    return $this->uriToAbsolute($file->getFileUri());
+  }
+
+  /**
+   * Generates relative URL for the file.
+   *
+   * @param \Drupal\file\FileInterface|null $file
+   *   File object.
+   *
+   * @return string
+   *   Relative url.
+   */
+  public function fileRelativeUrl($file) {
+    if (!$file) {
+      return NULL;
+    }
     return $this->uriToRelative($file->getFileUri());
   }
 
@@ -78,7 +95,20 @@ trait FileTrait {
    *   Relative url.
    */
   public function uriToRelative($uri) {
-    return \Drupal::service('file_url_generator')->generateString($uri);
+    return $this->fileUrlGenerator->generateString($uri);
+  }
+
+  /**
+   * Convert uri to absolute url.
+   *
+   * @param string $uri
+   *   File uri.
+   *
+   * @return string
+   *   Absolute url.
+   */
+  public function uriToAbsolute($uri) {
+    return $this->fileUrlGenerator->generateAbsoluteString($uri);
   }
 
   /**
@@ -92,6 +122,28 @@ trait FileTrait {
    */
   public function fileRealPath($uri) {
     return $this->fileSystem->realpath($uri);
+  }
+
+  /**
+   * View the file image in an image style.
+   *
+   * @param \Drupal\file\FileInterface $file
+   *   File entity.
+   * @param string $image_style_name
+   *   Image style name.
+   *
+   * @return string
+   *   Url to the image styled image.
+   */
+  public function fileUrlImageStyle($file, $image_style_name = 'thumbnail') {
+    if (is_numeric($file)) {
+      $file = $this->entityTypeManager->getStorage('file')->load($file);
+    }
+    $image_style = $this->entityTypeManager->getStorage('image_style')->load($image_style_name);
+    if (empty($file) || empty($image_style)) {
+      return NULL;
+    }
+    return $image_style->buildUrl($file->getFileUri());
   }
 
 }
