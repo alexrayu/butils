@@ -15,7 +15,7 @@ use Drupal\Core\TypedData\DataDefinition;
  *   id = "json_metadata",
  *   label = @Translation("JSON Metadata"),
  *   description = @Translation("Stores JSON-encoded metadata for the entity. Suggested field name is <i>field_json_metadata</i>."),
- *   category = @Translation("Metadata"),
+ *   category = "Metadata",
  *   default_widget = "json_metadata",
  *   default_formatter = "json_metadata",
  *   cardinality = 1,
