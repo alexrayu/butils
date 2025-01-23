@@ -111,6 +111,7 @@ trait JsonApiTrait {
    *   Whether the metadata was applied.
    */
   public function setEntityMeta($entity, array $meta, $field_name = 'field_json_metadata', $save = TRUE): bool {
+    $field_name = $field_name ?: 'field_json_metadata';
     if (!$entity->hasField($field_name)) {
       return FALSE;
     }
@@ -141,6 +142,7 @@ trait JsonApiTrait {
    *   Whether the metadata was applied.
    */
   public function setEntityMetaItem($entity, $key, $value, $field_name = 'field_json_metadata', $save = TRUE): bool {
+    $field_name = $field_name ?: 'field_json_metadata';
     $meta = $this->getEntityMeta($entity, $field_name);
     $meta[$key] = $value;
     return $this->setEntityMeta($entity, $meta, $field_name, $save);
