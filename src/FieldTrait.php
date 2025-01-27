@@ -101,6 +101,26 @@ trait FieldTrait {
   }
 
   /**
+   * Checks if entity type and bundle has a field with name.
+   *
+   * @param string $field_name
+   *   Field name.
+   * @param string $entity_type
+   *   Entity type.
+   * @param string $bundle
+   *   Bundle of an entity.
+   *
+   * @return bool
+   *   True if field with the specified name exists.
+   */
+  public function bundleHasField($field_name, $entity_type, $bundle = NULL) {
+    $bundle = $bundle ?: $entity_type;
+    $list = $this->entityFieldManager->getFieldDefinitions($entity_type, $bundle);
+
+    return !empty($list[$field_name]);
+  }
+
+  /**
    * Empty an entity's field.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
