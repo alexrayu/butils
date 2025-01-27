@@ -53,7 +53,7 @@ trait ParagraphsTrait {
     if ($entity instanceof NodeInterface) {
       return $entity;
     }
-    elseif ($entity instanceof ParagraphInterface) {
+    elseif ($entity && method_exists($entity, 'getParentEntity')) {
       $parent = $entity->getParentEntity();
       return $this->paragraphParentNode($parent);
     }
