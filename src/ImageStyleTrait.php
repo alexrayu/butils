@@ -26,6 +26,9 @@ trait ImageStyleTrait {
    */
   public function imageStyleUrl($image_uri, $id, $type = 'url') {
     $style = $this->entityTypeManager->getStorage('image_style')->load($id);
+    if (empty($image_uri) || empty($id)) {
+      return NULL;
+    }
     if (!empty($style)) {
       if ($type === 'url') {
         return $style->buildUrl($image_uri);
