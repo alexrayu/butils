@@ -37,4 +37,17 @@ trait StateTrait {
     return $this->state->set($key, $value);
   }
 
+  /**
+   * Deletes the state variable.
+   *
+   * @param string $key
+   *   State variable key.
+   *
+   * @return bool
+   *   Operation result.
+   */
+  public function delState($key) {
+    return $this->state->delete($key);
+  }
+
 }
