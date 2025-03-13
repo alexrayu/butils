@@ -110,7 +110,7 @@ trait HtmlTrait {
   }
 
   /**
-   * Strip the listed tags from the html sltring.
+   * Strip the listed tags from the html string.
    *
    * @param string $html
    *   Imput html string.
@@ -132,7 +132,7 @@ trait HtmlTrait {
     }
     $tags = (array) $tags;
     foreach ($tags as $tag) {
-      $html = preg_replace('/<' . $tag . '(\s+>|\s+.*>|>)/', '', $html);
+      $html = preg_replace('/<' . $tag . '(\s+>|\s+.*>|>)/iU', '', $html);
       $html = str_replace('</' . $tag . '>', '', $html);
     }
     $html = $this->cleanHtml($html);
@@ -141,7 +141,7 @@ trait HtmlTrait {
   }
 
   /**
-   * Replace a tag in the html sltring.
+   * Replace a tag in the html string.
    *
    * All the tag attributes will be lost.
    *
@@ -162,7 +162,7 @@ trait HtmlTrait {
     if (empty($tag) || empty($replacement_tag)) {
       return $html;
     }
-    $html = preg_replace('/<' . $tag . '(\s+>|\s+.*>|>)/', "<$replacement_tag>", $html);
+    $html = preg_replace('/<' . $tag . '(\s+>|\s+.*>|>)/iU', "<$replacement_tag>", $html);
     $html = str_replace('</' . $tag . '>', "</$replacement_tag>", $html);
 
     return $html;
@@ -197,7 +197,7 @@ trait HtmlTrait {
   }
   
   /**
-   * Strip the empty listed tags from the html sltring.
+   * Strip the empty listed tags from the html string.
    *
    * @param string $html
    *   Imput html string.
@@ -223,7 +223,7 @@ trait HtmlTrait {
       $total = 0;
       foreach ($tags as $tag) {
         $tag = trim($tag);
-        $html = preg_replace('/<' . $tag . '(\w*)(?:\s+\w+="[^"]+(?:"\$[^"]+"[^"]+)?")*>(\s|&nbsp;|\n|\r|\0|<\/\s?br\s?\/>)*<\/' . $tag . '>/', '', $html, -1, $cases);
+        $html = preg_replace('/<' . $tag . '(\w*)(?:\s+\w+="[^"]+(?:"\$[^"]+"[^"]+)?")*>(\s|&nbsp;|\n|\r|\0|<\/\s?br\s?\/>)*<\/' . $tag . '>/iU', '', $html, -1, $cases);
         $total += $cases;
       }
       $rounds++;

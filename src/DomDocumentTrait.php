@@ -2,6 +2,8 @@
 
 namespace Drupal\butils;
 
+use Drupal\Component\Utility\Html;
+
 /**
  * Trait DomDocument.
  *
@@ -64,6 +66,42 @@ trait DomDocumentTrait {
   }
 
   /**
+   * Deleted all matching elements.
+   *
+   * @param \DOMDocument|string $dom
+   *   DomDocument object or html string.
+   * @param string $selector
+   *   jQuery selector (simple syntax).
+   *
+   * @return string
+   *   The cleaned up html.
+   */
+  public function domDelAll($dom, string $selector) {
+    if (is_string($dom)) {
+      $dom = Html::load($dom);
+    }
+    [$tag, $attrs] = $this->parseQuerySelector($selector);
+    $xpath = new \DOMXPath($dom);
+    $query = "//{$tag}";
+    if (!empty($attrs)) {
+      $conditions = [];
+      foreach ($attrs as $key => $values) {
+        $values = (array) $values;
+        $conditions = array_map(fn ($value) => "contains(concat(' ', normalize-space(@" . $key . "), ' '), ' $value ')", $values);
+      }
+      $query = '//' . $tag . '[' . implode(' and ', $conditions) . ']';
+    }
+    $elements = $xpath->query($query);
+    $values = $elements ? iterator_to_array($elements) : [];
+    foreach ($values as $value) {
+      $value->parentNode->removeChild($value);
+    }
+
+    $html = $this->domGetBodyHtml($dom);
+    return $this->cleanHtml($html);
+  }
+
+  /**
    * Gets the dom body and turns it into html.
    *
    * @param \DOMDocument $dom
@@ -85,31 +123,41 @@ trait DomDocumentTrait {
   /**
    * Finds the first matching element.
    *
-   * @param \DOMDocument $dom
-   *   DomDocument object.
+   * @param \DOMDocument|string $dom
+   *   DomDocument object or html string.
    * @param string $selector
    *   jQuery selector (simple syntax).
+   * @param bool $inner
+   *   Whether to get only the inner html of the element.
    *
    * @return string|null
    *   The first matched snippet.
    */
-  public function domFind($dom, string $selector) {
-    $snippets = $this->domFindAll($dom, $selector);
+  public function domFind($dom, string $selector, $inner = FALSE) {
+    if (is_string($dom)) {
+      $dom = Html::load($dom);
+    }
+    $snippets = $this->domFindAll($dom, $selector, $inner);
     return $snippets[0] ?? NULL;
   }
 
   /**
    * Finds all matching elements.
    *
-   * @param \DOMDocument $dom
-   *   DomDocument object.
+   * @param \DOMDocument|string $dom
+   *   DomDocument object or html string.
    * @param string $selector
    *   jQuery selector (simple syntax).
+   * @param bool $inner
+   *   Whether to get only the inner html of the element.
    *
    * @return array
    *   The matched snippets.
    */
-  public function domFindAll($dom, string $selector) {
+  public function domFindAll($dom, string $selector, $inner = FALSE) {
+    if (is_string($dom)) {
+      $dom = Html::load($dom);
+    }
     [$tag, $attrs] = $this->parseQuerySelector($selector);
     $xpath = new \DOMXPath($dom);
     $query = "//{$tag}";
@@ -125,7 +173,17 @@ trait DomDocumentTrait {
     $snippets = [];
     $values = $elements ? iterator_to_array($elements) : [];
     foreach ($values as $value) {
-      $snippets[] = $dom->saveHTML($value);
+      if ($inner) {
+        $innerHtml = '';
+        foreach ($value->childNodes as $child) {
+          $innerHtml .= $dom->saveHTML($child);
+        }
+        $snippets[] = $innerHtml;
+      }
+      else {
+        $snippets[] = $dom->saveHTML($value);
+      }
+
     }
 
     return $snippets;
