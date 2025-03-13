@@ -25,16 +25,7 @@ trait HtmlTrait {
    */
   public function cleanHtml($html) {
     $html = $this->cleanString($html);
-
-    // Replace spaces before closing bracket.
-    $regex = '/<p[^>].*\s>/U';
-    preg_match_all($regex, $html, $matches);
-    $matches[0] = $matches[0] ?? [];
-    foreach ($matches[0] as $match) {
-      $html = str_replace(' >', '>', $html);
-    }
-
-    // Other replacements.
+    $html = str_replace(' >', '>', $html);
     $html = str_replace('< ', '&lt; ', $html);
     $html = preg_replace('/<!--.*?-->/', '', $html);
     $html = preg_replace('/<!--(.|\s)*?-->/', '', $html);
