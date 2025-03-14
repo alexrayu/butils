@@ -244,7 +244,7 @@ trait DomDocumentTrait {
    *   Array of tag and attributes.
    */
   public function parseQuerySelector(string $selector) {
-    $tag = preg_match('/^[a-zA-Z0-9]+/', $selector, $matches) ? $matches[0] : '*';
+    $tag = preg_match('/^[a-zA-Z0-9\-\_]+/', $selector, $matches) ? $matches[0] : '*';
     $attributes = [];
 
     // Match class selectors.
