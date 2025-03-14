@@ -2,7 +2,7 @@
 
 namespace Drupal\butils;
 
-use Drupal\Component\Utility\Html;
+use Masterminds\HTML5;
 
 /**
  * Trait DomDocument.
@@ -12,7 +12,7 @@ use Drupal\Component\Utility\Html;
 trait DomDocumentTrait {
 
   /**
-   * Gets the domelement HTML without the parent tag.
+   * Gets the dom-element HTML without the parent tag.
    *
    * @param \DOMNode $n
    *   DOMElement.
@@ -78,7 +78,7 @@ trait DomDocumentTrait {
    */
   public function domDelAll($dom, string $selector) {
     if (is_string($dom)) {
-      $dom = Html::load($dom);
+      $dom = $this->loadHtml($dom);
     }
     [$tag, $attrs] = $this->parseQuerySelector($selector);
     $xpath = new \DOMXPath($dom);
@@ -135,10 +135,41 @@ trait DomDocumentTrait {
    */
   public function domFind($dom, string $selector, $inner = FALSE) {
     if (is_string($dom)) {
-      $dom = Html::load($dom);
+      $dom = $this->loadHtml($dom);
     }
     $snippets = $this->domFindAll($dom, $selector, $inner);
     return $snippets[0] ?? NULL;
+  }
+
+  /**
+   * Finds the element's attributes.
+   *
+   * Attributes of the first encountered tag will be returned.
+   *
+   * @param \DOMDocument|string $dom
+   *   DomDocument object or html string.
+   *
+   * @return array
+   *   The attributes of an element.
+   */
+  public function domGetAttributes($dom) {
+    if (is_string($dom)) {
+      $dom = $this->loadHtml($dom);
+    }
+    $attributes = [];
+    $first_element = NULL;
+    foreach ($dom->documentElement->childNodes as $node) {
+      if ($node instanceof \DOMElement) {
+        $first_element = $node;
+        break;
+      }
+    }
+    if ($first_element && $first_element->hasAttributes()) {
+      foreach ($first_element->attributes as $attr) {
+        $attributes[$attr->name] = $attr->value;
+      }
+    }
+    return $attributes;
   }
 
   /**
@@ -156,7 +187,7 @@ trait DomDocumentTrait {
    */
   public function domFindAll($dom, string $selector, $inner = FALSE) {
     if (is_string($dom)) {
-      $dom = Html::load($dom);
+      $dom = $this->loadHtml($dom);
     }
     [$tag, $attrs] = $this->parseQuerySelector($selector);
     $xpath = new \DOMXPath($dom);
@@ -187,6 +218,20 @@ trait DomDocumentTrait {
     }
 
     return $snippets;
+  }
+
+  /**
+   * Loads html into DOM without adding a body tag.
+   *
+   * @param string $html
+   *   HTML to load.
+   *
+   * @return \DOMDocument
+   *   Loaded dom.
+   */
+  public function loadHtml($html) {
+    $html5 = new HTML5(['disable_html_ns' => TRUE, 'encoding' => 'UTF-8']);
+    return $html5->loadHTML($html);
   }
 
   /**
