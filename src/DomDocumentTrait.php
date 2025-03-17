@@ -77,6 +77,9 @@ trait DomDocumentTrait {
    *   The cleaned up html.
    */
   public function domDelAll($dom, string $selector) {
+    if (empty($dom)) {
+      return NULL;
+    }
     if (is_string($dom)) {
       $dom = $this->loadHtml($dom);
     }
@@ -134,6 +137,9 @@ trait DomDocumentTrait {
    *   The first matched snippet.
    */
   public function domFind($dom, string $selector, $inner = FALSE) {
+    if (empty($dom)) {
+      return NULL;
+    }
     if (is_string($dom)) {
       $dom = $this->loadHtml($dom);
     }
@@ -153,6 +159,9 @@ trait DomDocumentTrait {
    *   The attributes of an element.
    */
   public function domGetAttributes($dom) {
+    if (empty($dom)) {
+      return [];
+    }
     if (is_string($dom)) {
       $dom = $this->loadHtml($dom);
     }
@@ -186,6 +195,9 @@ trait DomDocumentTrait {
    *   The matched snippets.
    */
   public function domFindAll($dom, string $selector, $inner = FALSE) {
+    if (empty($dom)) {
+      return [];
+    }
     if (is_string($dom)) {
       $dom = $this->loadHtml($dom);
     }
