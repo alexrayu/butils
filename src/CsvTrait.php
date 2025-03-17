@@ -36,11 +36,11 @@ trait CsvTrait {
     }
 
     if ($handle = fopen($path, 'rb')) {
-
       // Get or calculate the header.
       if (($fragment = fgetcsv($handle, 0, $delimiter)) !== FALSE) {
         $header = $fragment;
         if (!empty($key_id)) {
+          if (!in_array($key_id, $header)) {
             $new_key = TRUE;
             $key_id = 'csv_uuid';
             array_unshift($header, $key_id);
