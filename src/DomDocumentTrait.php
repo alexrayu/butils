@@ -114,13 +114,27 @@ trait DomDocumentTrait {
    *   Html output.
    */
   public function domGetBodyHtml(\DOMDocument $dom) {
-    $output = '';
+    $content = '';
     $body = $dom->getElementsByTagName('body')->item(0);
-    foreach ($body->childNodes as $childNode) {
-      $output .= $dom->saveHTML($childNode);
+    if ($body) {
+      foreach ($body->childNodes as $node) {
+        $content .= $dom->saveHTML($node);
+      }
+    }
+    else {
+      foreach ($dom->childNodes as $node) {
+        if ($node->nodeName !== 'html' && $node->nodeName !== '#document') {
+          $content .= $dom->saveHTML($node);
+        }
+        elseif ($node->nodeName === 'html') {
+          foreach ($node->childNodes as $child) {
+            $content .= $dom->saveHTML($child);
+          }
+        }
+      }
     }
 
-    return $output;
+    return $content;
   }
 
   /**
